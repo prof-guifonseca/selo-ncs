@@ -1,0 +1,64 @@
+LICENÇA PROPRIETÁRIA (ALL RIGHTS RESERVED)
+
+Copyright (c) 2025–2026 Guilherme Fonseca de Oliveira (“OPERADOR/LICENCIANTE”).
+
+ALL RIGHTS RESERVED.
+
+1) Concessão de direitos
+
+Este repositório e seus conteúdos (incluindo, sem limitar, código‑fonte, arquitetura, documentação técnica,
+fluxos, templates e materiais de programa aqui incluídos) são PROPRIETÁRIOS. Nenhuma licença é concedida
+por este instrumento. É proibido copiar, reproduzir, distribuir, publicar, sublicenciar, vender, ceder,
+transferir, disponibilizar publicamente, derivar, adaptar, ou utilizar este material (no todo ou em parte),
+exceto:
+  (a) quando permitido por lei de ordem pública (ex.: usos estritamente necessários para interoperabilidade,
+      quando aplicável); ou
+  (b) quando houver autorização prévia e escrita do titular; ou
+  (c) quando houver licença contratual específica aplicável.
+
+2) Third‑Party Marks & Materials (marcas e materiais de terceiros)
+
+2.1) NCS — marca e ativos institucionais (terceiro)
+A marca e sinais distintivos “NCS”, o nome do Programa “NCS: Governança & Impacto”, a identidade visual,
+selos, símbolos e comunicações institucionais da NCS são ATIVOS INSTITUCIONAIS de titularidade da
+ORGANIZAÇÃO DA SOCIEDADE CIVIL (OSC) NOSSA COMUNIDADE SUSTENTÁVEL (“NCS”).
+
+O presente repositório pode conter referências e/ou arquivos que materializam esses ativos (ex.: logos e
+imagens). Tais itens são utilizados sob licença operacional limitada, nos termos do contrato entre as partes.
+Não há cessão, transferência ou presunção de copropriedade desses sinais distintivos.
+
+Qualquer uso da marca NCS fora do escopo do Programa e da operação da Plataforma exige autorização
+específica da NCS.
+
+2.2) UEL/INTUEL/AINTEC — marcas e ativos institucionais (terceiros)
+Marcas, logotipos e outros sinais distintivos associados à UEL/INTUEL/AINTEC (quando presentes) são de
+titularidade de seus respectivos titulares. Seu uso aqui ocorre no contexto institucional do projeto incubado,
+observada a necessidade de anuências/autorizações institucionais aplicáveis.
+
+Este repositório NÃO concede licença sobre esses ativos de terceiros. Eventuais comprovações de anuência e
+registros institucionais devem ser mantidos pela equipe em dossiê interno (ver docs/ip/THIRD_PARTY.md).
+
+2.3) Dependências e componentes de terceiros
+Bibliotecas e dependências de terceiros utilizadas pelo projeto permanecem regidas por suas respectivas
+licenças. Ver inventário e procedimento em docs/ip/THIRD_PARTY.md.
+
+3) Contractual License (licença contratual específica)
+
+Existe licença contratual específica aplicável ao uso desta Solução no âmbito do Programa “NCS: Governança &
+Impacto”, bem como licença de uso operacional dos sinais distintivos da NCS ao OPERADOR. Essa relação é
+regida pelo:
+
+  “Contrato de Licenciamento de Solução e Parceria Operacional — 30/12/2025”
+
+Em caso de conflito entre este LICENSE e o contrato aplicável, prevalecem os termos do contrato no âmbito
+estritamente contratado.
+
+4) Sem garantias (as is)
+
+Na máxima extensão permitida em lei, este material é fornecido “NO ESTADO EM QUE SE ENCONTRA” (AS IS),
+sem garantias expressas ou implícitas, inclusive de adequação a um propósito específico.
+
+5) Contato
+
+Para solicitações de licença, autorização de uso ou dúvidas sobre titularidade e permissões, contate o
+OPERADOR/LICENCIANTE por canais oficiais do projeto.

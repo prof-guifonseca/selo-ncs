@@ -1,0 +1,14 @@
+brands/default/config.json
+brands/default/brand.css
+src/brand.js
+src/i18n/ptBR.js
+scripts/contract_brand.mjs
+package.json
+docs/front/WHITE_LABEL_V1.md
+docs/front/WHITE_LABEL_V0.md
+brands/default/config.json
+partials/navbar.html
+partials/footer.html
+build.js
+src/main.js
+docs/STATUS.md

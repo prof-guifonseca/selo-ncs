@@ -1,0 +1,44 @@
+<!-- =========================
+      Chat global
+    ========================== -->
+    <button
+      id="chat-open-button"
+      class="chat-open-button"
+      type="button"
+      aria-label="Abrir assistente"
+      aria-controls="chat-panel"
+      aria-expanded="false"
+      title="Assistente"
+      data-action="chat-open"
+    >
+      <span aria-hidden="true">IA</span>
+    </button>
+
+    <aside id="chat-panel" class="chat-panel hidden" aria-label="Assistente virtual" aria-labelledby="chat-title" role="complementary">
+      <header class="chat-header">
+        <h3 id="chat-title">Assistente</h3>
+        <button
+          id="chat-close-button"
+          class="chat-close-button"
+          type="button"
+          aria-label="Fechar assistente"
+          aria-controls="chat-panel"
+          title="Fechar"
+          data-action="chat-close"
+        >
+          ×
+        </button>
+      </header>
+
+      <div id="chat-messages" class="chat-messages" role="log" aria-live="polite" aria-relevant="additions"></div>
+      <div id="chat-status" class="chat-status" aria-live="polite"></div>
+
+      <div class="chat-input-area" aria-label="Entrada de mensagem">
+        <label for="chat-input-field" class="sr-only">Digite sua pergunta</label>
+        <input id="chat-input-field" type="text" placeholder="Digite sua pergunta..." aria-label="Digite sua pergunta" autocomplete="off" />
+        <button id="chat-send-button" class="btn btn-primary btn-small" type="button" data-action="chat-send">Enviar</button>
+        <button id="chat-faq-button" class="btn btn-secondary btn-small" type="button" title="Perguntas rápidas" data-action="chat-faq">FAQ</button>
+      </div>
+
+      <div id="chat-faq-list" class="chat-faq-list" aria-label="Sugestões de perguntas"></div>
+    </aside>

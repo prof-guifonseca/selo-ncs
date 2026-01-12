@@ -1,0 +1,29 @@
+/* ==========================================================================
+   NCS — Components — headings.css
+   Fonte: split de styles/components.css (v5.0.1)
+   ========================================================================== */
+
+@layer components {
+/* --------------------------------------------------------------------------
+   1) Headings — scoped (não mexe no dashboard)
+   -------------------------------------------------------------------------- */
+
+/* Centralização apenas onde faz sentido (landing / hero / modais) */
+.section-header h2,
+.hero-content h2,
+.modal-content h2 {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Dashboard: títulos devem ser alinhados à esquerda */
+.dash-card .card-head h2,
+.detail-title h2,
+.dash-title {
+  text-align: left;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+}

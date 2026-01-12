@@ -1,0 +1,139 @@
+E2E — Staging Run (manual)
+
+Data/Hora: 2026-01-08 18:20:22 -03 (-0300)
+Staging URL (site): https://selo-ncs-staging.netlify.app
+API base: https://selo-ncs-staging.netlify.app/.netlify/functions/api
+Snapshot: ZIP sha256: 890c8746ef432a197d908b1ebddd227af6e04443c240e71edf82f3497bb87474
+
+Nota de sigilo: NÃO cole tokens/JWTs completos, nem chaves Supabase/Netlify.
+
+============================================================
+0) Pré‑requisitos
+============================================================
+[ ] Staging com HTTPS (para cookies Secure/SameSite=None, se aplicável)
+[ ] 2 contas de teste em tenants distintos (Tenant A e Tenant B)
+[ ] 1 conta Admin (gestor)
+[ ] 1 conta Auditor (avaliador) — se o fluxo já estiver habilitado
+
+Contas usadas (somente e‑mails, sem senhas):
+- Tenant A: ______________________
+- Tenant B: ______________________
+- Admin: _________________________
+- Auditor: ________________________
+
+============================================================
+1) Smoke de acesso (anônimo)
+============================================================
+Passos:
+1. GET /api/health (sem auth)
+Esperado: 200
+Resultado (status + payload resumido): ______________________
+
+2. Abrir a SPA (home / login)
+Esperado: carrega sem erros críticos (console limpo ou com warnings conhecidos)
+Resultado: ______________________
+Fricções/bugs: ___________________
+
+============================================================
+2) Auth / Sessão (Tenant A)
+============================================================
+Passos:
+1. Login Tenant A
+Esperado: login ok; cookie HttpOnly setado; /me retorna usuário
+Resultado: ______________________
+
+2. Navegar para dashboard do cliente
+Esperado: carrega dados do tenant (empresa/processos)
+Resultado: ______________________
+
+3. (Se existir) Registro de novo usuário (/auth/register)
+Esperado: cria conta + empresa/membership; exige aceite de termos
+Resultado: ______________________
+
+Fricções/bugs:
+- ________________________________
+
+============================================================
+3) Fluxo de processo (Tenant A)
+============================================================
+Passos (ajuste para o fluxo real do MVP):
+1. Criar ou abrir um processo do Tenant A
+Esperado: processo aparece na lista; detalhes carregam
+Processo ID (apenas UUID): ______________________
+Resultado: ______________________
+
+2. Submeter evidências (upload)
+Esperado: upload conclui; arquivo não fica publicamente acessível
+Resultado: ______________________
+Fricções/bugs: ___________________
+
+3. Tentar acessar evidência por URL direta (sem autorização)
+Esperado: negado / inexistente (bucket private)
+Resultado: ______________________
+
+============================================================
+4) Isolamento multi‑tenant (Tenant B vs Tenant A)
+============================================================
+Passos:
+1. Logout Tenant A
+2. Login Tenant B
+3. Tentar abrir/consultar o processo do Tenant A (por ID, link ou endpoint)
+Esperado: 401/403/404 (nunca 200)
+Resultado: ______________________
+
+4. Confirmar que Tenant B enxerga apenas seus próprios processos
+Esperado: lista/detalhes apenas do tenant B
+Resultado: ______________________
+
+Fricções/bugs:
+- ________________________________
+
+============================================================
+5) Admin (gestor)
+============================================================
+Passos:
+1. Login Admin
+Esperado: acesso ao painel gestor; triagem/designação habilitadas
+Resultado: ______________________
+
+2. Acessar processo Tenant A e Tenant B
+Esperado: admin consegue ver (se políticas permitem acesso irrestrito)
+Resultado: ______________________
+
+3. (Se aplicável) Atribuir auditor ao processo Tenant A
+Esperado: assignment criado; auditor passa a ver o processo
+Resultado: ______________________
+
+Fricções/bugs:
+- ________________________________
+
+============================================================
+6) Auditor (avaliador)
+============================================================
+Passos (se já habilitado):
+1. Login Auditor
+2. Ver fila de processos atribuídos
+3. Abrir processo atribuído
+4. Ver evidências **sem** permitir download/cópia indevida (conforme política)
+
+Esperado: acesso apenas a processos atribuídos; trilha auditável registrada
+Resultado: ______________________
+Fricções/bugs:
+- ________________________________
+
+============================================================
+7) Encerramento
+============================================================
+Status geral do E2E:
+[ ] PASS (sem bloqueios)
+[ ] PASS com ressalvas (w/ fricções não bloqueantes)
+[ ] FAIL (bloqueios)
+
+Bloqueios (se houver):
+- ________________________________
+
+Riscos de go-live identificados:
+- ________________________________
+
+Ações recomendadas:
+- ________________________________

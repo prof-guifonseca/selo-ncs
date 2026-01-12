@@ -1,0 +1,236 @@
+/* ==========================================================================
+   NCS — Pages — dashboards.css
+   Fonte: split de styles/pages.css (v5.0)
+   ========================================================================== */
+
+@layer pages {
+/* ==========================================================================
+   NCS — Pages (v5.0 CONSOLIDADO / LIMPO / MODULAR)
+   Estilos específicos por página: Landing, Auth, Client Dashboard, Auditor Dashboard.
+
+   Diretriz:
+   - Componentes reutilizáveis ficam em components.css (cards, botões, navbar, listas, etc.)
+   - pages.css cuida de ritmo de seções, containers e grids por página (sempre escopado)
+   ========================================================================== */
+
+/* Utilitário pontual (títulos com quebra controlada) */
+.hero-title-line { display: block; }
+
+/* --------------------------------------------------------------------------
+   15) Dashboard shared (shell + header + hero)
+   -------------------------------------------------------------------------- */
+
+.client-dashboard-shell,
+.auditor-dashboard-shell {
+  width: var(--container-w);
+  margin: calc(var(--header-h) + var(--s-8)) auto var(--s-12);
+}
+
+/* --------------------------------------------------------------------------
+   Admin dashboard shell
+   --------------------------------------------------------------------------
+   Garante que o painel do gestor siga o mesmo ritmo de larguras e margens dos
+   dashboards do participante e do avaliador. Esta classe é atribuída ao
+   elemento de shell no admin-dashboard.html e replicada aqui para manter
+   consistência visual.
+*/
+.admin-dashboard-shell {
+  width: var(--container-w);
+  margin: calc(var(--header-h) + var(--s-8)) auto var(--s-12);
+}
+
+.dash-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--s-4);
+  margin-bottom: var(--s-4);
+}
+
+.dash-title { margin: 0; }
+
+.dash-subtitle {
+  margin: var(--s-2) 0 0;
+  color: var(--color-muted);
+  max-width: 76ch;
+}
+
+.dash-hero {
+  border-radius: var(--r-3);
+  border: 1px solid var(--color-line);
+  background: linear-gradient(135deg, var(--color-surface-2), var(--color-surface));
+  box-shadow: var(--shadow-2);
+  overflow: hidden;
+}
+
+.btn-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  align-items: center;
+}
+
+/* --------------------------------------------------------------------------
+   16) Auditor dashboard layout (compat)
+   OBS: grid principal fila/detalhe está em components.css
+   -------------------------------------------------------------------------- */
+
+.auditor-dashboard-layout {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: var(--s-5);
+  margin-top: var(--s-5);
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .auditor-dashboard-layout { grid-template-columns: 1fr; }
+}
+
+/* --------------------------------------------------------------------------
+   Admin dashboard layout
+   --------------------------------------------------------------------------
+   Define o grid de duas colunas (fila → detalhe) para o painel de Operação e
+   Decisão da NCS. Em telas menores, reduz para uma coluna. Usa a mesma
+   proporção do layout do avaliador para consistência visual.
+*/
+.admin-dashboard-layout {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: var(--s-5);
+  margin-top: var(--s-5);
+  align-items: start;
+}
+
+/* Admin: pequenos helpers para manter o mesmo ritmo do client/auditor */
+.admin-notice {
+  margin-top: var(--s-4);
+}
+
+.admin-config-card {
+  margin-top: var(--s-5);
+}
+
+.admin-config-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--s-5);
+  padding: var(--s-5);
+}
+
+.admin-config-lists {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--s-4);
+  padding: var(--s-5);
+  padding-top: 0;
+}
+
+@media (max-width: 1100px) {
+  .admin-dashboard-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* audit timeline */
+.audit-timeline { display: grid; gap: var(--s-3); }
+
+.audit-item {
+  border-left: 3px solid var(--color-accent);
+  padding: var(--s-3) var(--s-4);
+  background: var(--color-surface);
+  border-radius: var(--r-2);
+  border: 1px solid var(--color-line);
+}
+
+.audit-item h4 { margin: 0 0 var(--s-1); }
+.audit-meta { font-size: var(--fs-00); color: var(--color-muted); }
+
+/* --------------------------------------------------------------------------
+   17) Dashboards: grids específicos (somente layout)
+   -------------------------------------------------------------------------- */
+
+.home-cards-grid {
+  display: grid;
+  gap: var(--s-6);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.home-cards-grid > .dash-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.dash-hero-grid {
+  display: grid;
+  gap: var(--s-6);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  align-items: stretch;
+}
+
+.client-overview-grid {
+  display: grid;
+  gap: var(--s-6);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.public-internal-grid,
+.deliverables-grid,
+.quick-links {
+  display: grid;
+  gap: var(--s-3);
+}
+
+/* removed .mini-kpis layout: hero mini-KPI grid no longer used in client dashboard */
+
+/* removed .next-actions styles: checklist card removed from client dashboard */
+
+.quick-links {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.quick-link {
+  padding: var(--s-3);
+  border: 1px solid var(--color-line);
+  border-radius: var(--r-2);
+  background: var(--color-surface);
+}
+
+/* --------------------------------------------------------------------------
+   18) Dashboard: separadores por pilar (tabelas)
+   - patch tokenizado (remove rgba solto)
+   -------------------------------------------------------------------------- */
+
+.pillar-divider th {
+  background: var(--color-surface-2);
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+  padding: 0.65rem 0.75rem;
+  color: var(--color-muted);
+  font-weight: var(--fw-bold);
+}
+
+.pillar-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 26px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+
+  background: var(--color-accent-soft);
+  border: 1px solid var(--color-accent-soft-border);
+  color: var(--color-text);
+
+  font-size: var(--fs-00);
+  margin-right: 10px;
+}
+
+.pillar-title {
+  font-size: var(--fs-00);
+}
+}

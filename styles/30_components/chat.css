@@ -1,0 +1,235 @@
+/* ==========================================================================
+   NCS — Components — chat.css
+   Fonte: split de styles/components.css (v5.0.1)
+   ========================================================================== */
+
+@layer components {
+/* --------------------------------------------------------------------------
+   15) Chat — canto direito
+   -------------------------------------------------------------------------- */
+
+/* Trigger (FAB) */
+.chat-fab,
+.chat-open-button {
+  position: fixed;
+  right: var(--s-4);
+  left: auto;
+  bottom: calc(var(--s-4) + env(safe-area-inset-bottom, 0px));
+  z-index: 1200;
+
+  width: 54px;
+  height: 54px;
+  border-radius: var(--r-pill);
+
+  background: var(--color-brand);
+  color: var(--color-on-brand);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+
+  box-shadow: 0 18px 44px rgba(44, 122, 87, 0.26);
+  display: grid;
+  place-items: center;
+  padding: 0;
+  cursor: pointer;
+
+  transition:
+    transform var(--dur-1) var(--ease),
+    box-shadow var(--dur-2) var(--ease),
+    background var(--dur-2) var(--ease);
+}
+
+.chat-fab:hover,
+.chat-open-button:hover {
+  background: var(--brand-1);
+  transform: translateY(-1px);
+  box-shadow: 0 22px 54px rgba(44, 122, 87, 0.28);
+}
+
+.chat-fab:active,
+.chat-open-button:active {
+  transform: translateY(0);
+}
+
+.chat-fab:focus-visible,
+.chat-open-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--focus), 0 22px 54px rgba(44, 122, 87, 0.28);
+}
+
+/* caso o botão seja <a> */
+.chat-fab,
+.chat-fab:visited {
+  text-decoration: none;
+}
+
+.chat-close-button {
+  background: transparent;
+  border: none;
+  color: var(--color-text-2);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  line-height: 1;
+  transition: color var(--dur-2) var(--ease);
+}
+
+.chat-close-button:hover {
+  color: var(--color-text);
+}
+
+/* Panel */
+.chat-panel {
+  position: fixed;
+  right: var(--s-4);
+  left: auto;
+  bottom: calc(var(--s-4) + 70px + env(safe-area-inset-bottom, 0px));
+
+  width: min(380px, calc(100vw - 2 * var(--s-4)));
+  max-height: min(560px, calc(100vh - 140px));
+
+  background: var(--color-surface);
+  border-radius: var(--r-3);
+  border: 1px solid var(--color-line);
+  box-shadow: var(--shadow-3);
+  overflow: hidden;
+
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--s-4);
+  border-bottom: 1px solid rgba(11, 18, 32, 0.06);
+  background: var(--color-surface);
+}
+
+.chat-title {
+  font-weight: var(--fw-semibold);
+}
+
+.chat-messages {
+  padding: var(--s-4);
+  overflow: auto;
+  display: grid;
+  gap: var(--s-3);
+  background: var(--color-surface-2);
+}
+
+.chat-message {
+  border-radius: var(--r-2);
+  padding: var(--s-3);
+  border: 1px solid rgba(11, 18, 32, 0.08);
+  background: var(--color-surface);
+  color: var(--color-text-2);
+
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.chat-message.user {
+  border-color: rgba(44, 122, 87, 0.22);
+  background: rgba(44, 122, 87, 0.08);
+}
+
+.chat-message.assistant {
+  border-color: rgba(11, 106, 166, 0.18);
+  background: rgba(11, 106, 166, 0.08);
+}
+
+/* Pending ("Digitando…") */
+.chat-message.pending {
+  opacity: 0.78;
+  position: relative;
+  padding-right: 3.2rem; /* espaço para os pontinhos */
+}
+
+/* Três pontinhos animados (sem imagens, sem SVG) */
+.chat-message.pending::after {
+  content: "";
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  width: 24px;
+  height: 8px;
+  transform: translateY(-50%);
+  border-radius: 999px;
+
+  /* três pontos via radial-gradient */
+  background:
+    radial-gradient(currentColor 2px, transparent 3px) 0 50% / 8px 8px no-repeat,
+    radial-gradient(currentColor 2px, transparent 3px) 8px 50% / 8px 8px no-repeat,
+    radial-gradient(currentColor 2px, transparent 3px) 16px 50% / 8px 8px no-repeat;
+
+  opacity: 0.65;
+  animation: ncs-chat-dots 1s infinite ease-in-out;
+}
+
+.chat-input-area {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-4);
+  border-top: 1px solid rgba(11, 18, 32, 0.06);
+  background: var(--color-surface);
+}
+
+.chat-input-area > input {
+  min-width: 0;
+}
+
+.chat-status {
+  padding: 0 var(--s-4) var(--s-3);
+  font-size: var(--fs-00);
+  color: var(--color-muted);
+}
+
+/* Status (ID) com boa leitura (não “pula” layout) */
+#chat-status {
+  min-height: 1.25rem;
+  line-height: 1.25rem;
+  opacity: 0.9;
+}
+
+/* FAQ */
+.chat-faq-list {
+  display: none;
+  padding: 0;
+  margin: 0;
+}
+
+.chat-faq-list.show {
+  display: grid;
+  padding: 0 var(--s-4) var(--s-4);
+  gap: var(--s-2);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.chat-faq-item {
+  text-align: left;
+  border-radius: var(--r-1);
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  padding: 0.55rem 0.65rem;
+  color: var(--color-text-2);
+  transition:
+    background var(--dur-2) var(--ease),
+    transform var(--dur-1) var(--ease),
+    box-shadow var(--dur-2) var(--ease);
+}
+
+.chat-faq-item:hover {
+  background: var(--color-surface-2);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-1);
+}
+
+.chat-faq-item:active {
+  transform: translateY(0);
+}
+
+}

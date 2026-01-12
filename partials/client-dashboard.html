@@ -1,0 +1,1210 @@
+<!-- ============================================================
+  client-dashboard.html — Painel do Participante (Home + Painel)
+  Objetivo: HTML estável, IDs/data-actions preservados e pronto p/ integração.
+
+  Ajuste regulatório (Programa de Verificação Independente):
+  - HOME fica OCULTO por padrão (mas NÃO removido)
+  - PAINEL fica VISÍVEL por padrão
+  - Default abre em "Evidências" (tab/panel ativos), sem suprimir conteúdo
+  - Linguagem alinhada ao regulamento:
+    * “Em validação” = revisão técnica documental (não autoriza uso do selo)
+    * “Validado” = após verificação independente concluída (autoriza uso do selo)
+    * Página pública verificável sustenta leitura pública do status do ciclo
+    * Evidências: rastreabilidade + cadeia de custódia + minimização de dados
+
+  UI clean (jan/2026):
+  - Removidos callouts/cards explicativos redundantes
+  - Topo anterior com múltiplos cards foi removido para simplificar a interface
+  - IDs essenciais (client‑scope / client‑seal‑permission / client‑public‑link‑short / client‑seal‑mini)
+    foram realocados para a aba "Selo & link" para manter JS íntegro e UI limpa
+============================================================ -->
+
+<div id="client-dashboard-view" class="view" data-view="client-dashboard">
+  <div class="client-dashboard-shell client-dashboard-container" data-shell="client">
+    <!-- SR -->
+    <div id="client-dashboard-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- =========================================================
+      HOME (mantido, mas oculto por padrão)
+    ========================================================== -->
+    <section
+      id="client-dashboard-home"
+      class="client-dashboard-home"
+      aria-label="Central de tarefas do participante"
+      data-ui="client-home"
+      hidden
+    >
+      <div class="home-cards-grid">
+        <article class="dash-card home-card home-primary" aria-label="Continuar ou iniciar submissão" data-ux="primary-cta">
+          <header class="card-head">
+            <h2 class="h2-tight">Continuar o ciclo</h2>
+            <p class="muted">Retome de onde parou e avance para a próxima etapa.</p>
+          </header>
+
+          <div class="home-card-body">
+            <button
+              class="btn btn-primary"
+              type="button"
+              id="home-btn-continue"
+              data-action="client-home"
+              data-go="continue"
+            >
+              Continuar agora
+            </button>
+          </div>
+        </article>
+
+        <article class="dash-card home-card home-progress" aria-label="Acompanhar andamento" data-ux="progress-card">
+          <header class="card-head">
+            <h2 class="h2-tight">Acompanhar andamento</h2>
+            <p class="muted">Fluxo do ciclo (atualiza automaticamente).</p>
+          </header>
+
+          <ol
+            class="stepper"
+            id="client-stepper-home"
+            aria-label="Fluxo do ciclo"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            <li class="step done">Autoavaliação</li>
+            <li class="step current">Evidências</li>
+            <li class="step">Submissão</li>
+            <li class="step">Análise documental</li>
+            <li class="step">Verificação</li>
+            <li class="step">Validado</li>
+          </ol>
+
+          <div class="home-card-body">
+            <button
+              class="btn btn-secondary btn-small"
+              type="button"
+              data-action="client-home"
+              data-go="overview"
+              aria-label="Ir para visão geral"
+            >
+              Ver visão geral
+            </button>
+          </div>
+        </article>
+
+        <article class="dash-card home-card home-kpis" aria-label="Indicadores resumidos" data-ux="kpis-card">
+          <header class="card-head">
+            <h2 class="h2-tight">Indicadores</h2>
+            <p class="muted">Resumo do que falta para submeter.</p>
+          </header>
+
+          <div class="kpi-grid" aria-label="KPIs resumidos">
+            <div class="kpi-item">
+              <span class="kpi-value" id="home-kpi-pendentes" aria-live="polite">—</span>
+              <span class="kpi-label">Pendentes</span>
+            </div>
+            <div class="kpi-item">
+              <span class="kpi-value" id="home-kpi-conformes" aria-live="polite">—</span>
+              <span class="kpi-label">Validados</span>
+            </div>
+            <div class="kpi-item">
+              <span class="kpi-value" id="home-kpi-pontos" aria-live="polite">—</span>
+              <span class="kpi-label">Pontuação</span>
+            </div>
+          </div>
+
+          <div class="home-card-body">
+            <button
+              class="btn btn-secondary btn-small"
+              type="button"
+              id="home-btn-indicators"
+              data-action="client-home"
+              data-go="self"
+            >
+              Ver detalhes
+            </button>
+          </div>
+        </article>
+
+        <article class="dash-card home-card home-guide" aria-label="Guia rápido do processo" data-ux="guide-card">
+          <header class="card-head">
+            <h2 class="h2-tight">Entender o processo</h2>
+            <p class="muted">Regras, metodologia e o que dá força pública ao selo.</p>
+          </header>
+
+          <div class="home-card-body">
+            <button
+              class="btn btn-link btn-small"
+              type="button"
+              id="home-btn-guide"
+              data-action="open-modal"
+              data-modal="client-guide"
+            >
+              Abrir guia
+            </button>
+          </div>
+        </article>
+      </div>
+    </section>
+    <!-- /HOME -->
+
+    <!-- =========================================================
+      PAINEL (visível por padrão)
+    ========================================================== -->
+    <div
+      id="client-full-dashboard"
+      data-ui="client-dashboard"
+      role="main"
+      aria-label="Painel completo do participante"
+    >
+      <!-- TOPO (focus mode) -->
+      <div id="client-top-panels" data-ui="client-top-panels">
+        <header class="dash-topbar" aria-label="Cabeçalho do ciclo" data-ux="topbar">
+          <div class="dash-topbar-left">
+            <!-- Bind the organization name from the view model. Keep the element ID intact. -->
+            <h1 id="client-company-name" class="dash-title" data-bind="companyName">Painel da Organização</h1>
+
+            <!-- Status do ciclo + datas (mantido) -->
+            <div class="dash-meta muted" aria-label="Status, prazo e submissão">
+              <span class="meta-label">Status do ciclo:</span>
+              <span id="client-cycle-status" class="meta-value" aria-live="polite">—</span>
+              <span class="dot-sep" aria-hidden="true">•</span>
+
+              <span class="meta-label">Submissão registrada em:</span>
+              <span id="client-submitted-at" class="meta-value" aria-live="polite">—</span>
+              <span class="dot-sep" aria-hidden="true">•</span>
+
+              <span class="meta-label">SLA (30 dias após submissão):</span>
+              <span id="client-sla-countdown" class="meta-value" aria-live="polite">—</span>
+            </div>
+          </div>
+
+          <div class="dash-topbar-right" aria-label="Ações rápidas">
+            <div class="btn-cluster">
+              <button class="btn btn-primary btn-small" type="button" data-action="client-cta" data-cta="submit">
+                Submeter para análise
+              </button>
+              <button class="btn btn-secondary btn-small" type="button" data-action="client-cta" data-cta="respond">
+                Responder ajustes
+              </button>
+              <button class="btn btn-secondary btn-small" type="button" data-action="client-cta" data-cta="download">
+                Baixar entregas
+              </button>
+            </div>
+
+            <div class="dash-utility" aria-label="Ajuda e políticas">
+              <button class="btn btn-link btn-small" type="button" data-action="open-modal" data-modal="criteria">
+                Critérios (metodologia)
+              </button>
+              <button class="btn btn-link btn-small" type="button" data-action="open-modal" data-modal="seal-use">
+                Uso do selo
+              </button>
+              <!-- tours descontinuados -->
+            </div>
+          </div>
+        </header>
+
+        <!-- Top hero section removed to simplify the client dashboard UI -->
+      </div>
+      <!-- /TOPO -->
+
+      <!-- =========================================================
+        TABS (default já em Evidências)
+      ========================================================== -->
+      <nav
+        class="client-subnav"
+        aria-label="Seções do painel do participante"
+        role="tablist"
+        data-ux="subnav"
+        aria-orientation="horizontal"
+      >
+        <!-- Guia de Perfil (nova) -->
+        <button
+          class="subnav-btn"
+          type="button"
+          role="tab"
+          id="client-tab-profile"
+          aria-selected="false"
+          aria-controls="client-section-profile"
+          tabindex="-1"
+          data-action="client-switch-section"
+          data-section="profile"
+        >
+          Perfil
+        </button>
+        <button
+          class="subnav-btn active"
+          type="button"
+          role="tab"
+          id="client-tab-overview"
+          aria-selected="true"
+          aria-controls="client-section-overview"
+          tabindex="0"
+          data-action="client-switch-section"
+          data-section="overview"
+        >
+          Visão geral
+        </button>
+
+        <button
+          class="subnav-btn"
+          type="button"
+          role="tab"
+          id="client-tab-evidence"
+          aria-selected="false"
+          aria-controls="client-section-evidence"
+          tabindex="-1"
+          data-action="client-switch-section"
+          data-section="evidence"
+        >
+          Evidências (E/S/G)
+        </button>
+
+        <button
+          class="subnav-btn"
+          type="button"
+          role="tab"
+          id="client-tab-self"
+          aria-selected="false"
+          aria-controls="client-section-self"
+          tabindex="-1"
+          data-action="client-switch-section"
+          data-section="self"
+        >
+          Autoavaliação
+        </button>
+
+        <button
+          class="subnav-btn"
+          type="button"
+          role="tab"
+          id="client-tab-feedback"
+          aria-selected="false"
+          aria-controls="client-section-feedback"
+          tabindex="-1"
+          data-action="client-switch-section"
+          data-section="feedback"
+        >
+          Devolutivas
+        </button>
+
+        <button
+          class="subnav-btn"
+          type="button"
+          role="tab"
+          id="client-tab-reports"
+          aria-selected="false"
+          aria-controls="client-section-reports"
+          tabindex="-1"
+          data-action="client-switch-section"
+          data-section="reports"
+        >
+          Entregas
+        </button>
+
+        <button
+          class="subnav-btn"
+          type="button"
+          role="tab"
+          id="client-tab-seal"
+          aria-selected="false"
+          aria-controls="client-section-seal"
+          tabindex="-1"
+          data-action="client-switch-section"
+          data-section="seal"
+        >
+          Selo &amp; link
+        </button>
+
+        <button
+          class="subnav-btn"
+          type="button"
+          role="tab"
+          id="client-tab-plan"
+          aria-selected="false"
+          aria-controls="client-section-plan"
+          tabindex="-1"
+          data-action="client-switch-section"
+          data-section="plan"
+        >
+          Plano de ação
+        </button>
+
+        <button
+          class="subnav-btn"
+          type="button"
+          role="tab"
+          id="client-tab-audit"
+          aria-selected="false"
+          aria-controls="client-section-audit"
+          tabindex="-1"
+          data-action="client-switch-section"
+          data-section="audit"
+        >
+          Trilha
+        </button>
+      </nav>
+
+      <!-- =========================================================
+        PANELS
+      ========================================================== -->
+
+      <!-- PERFIL -->
+      <section
+        id="client-section-profile"
+        class="client-section"
+        role="tabpanel"
+        tabindex="0"
+        aria-labelledby="client-tab-profile"
+        aria-label="Perfil da organização"
+        data-panel="profile"
+        hidden
+      >
+        <div class="dash-card">
+          <header class="card-head">
+            <h2 class="h2-tight">Perfil da organização</h2>
+          </header>
+          <p class="muted">Obrigatório para submeter o ciclo. Leva 2–3 minutos.</p>
+          <div class="profile-status mb-2">
+            <!-- Bind the computed profile status text. Keep the element ID intact. -->
+            <span id="client-profile-status" class="chip" data-bind="profileStatusText">—</span>
+            <span id="client-profile-progress" class="muted">—</span>
+          </div>
+          <form id="client-profile-form" class="form-grid" novalidate>
+            <!-- Bloco Dados básicos -->
+            <fieldset class="span-all">
+              <legend class="h3-tight">Dados básicos</legend>
+              <div class="form-group">
+                <label for="client-profile-legal-name">Razão social</label>
+                <input id="client-profile-legal-name" name="legalName" type="text" required />
+              </div>
+              <div class="form-group">
+                <label for="client-profile-trade-name">Nome fantasia</label>
+                <input id="client-profile-trade-name" name="tradeName" type="text" />
+              </div>
+              <div class="form-group">
+                <label for="client-profile-cnpj">CNPJ</label>
+                <input id="client-profile-cnpj" name="cnpj" type="text" required />
+              </div>
+              <div class="form-group">
+                <label for="client-profile-cnae-main">CNAE principal</label>
+                <input id="client-profile-cnae-main" name="cnaeMain" type="text" required />
+              </div>
+              <div class="form-group">
+                <label for="client-profile-cnae-secondary">CNAEs secundários</label>
+                <input id="client-profile-cnae-secondary" name="cnaeSecondary" type="text" />
+              </div>
+              <div class="form-group">
+                <label for="client-profile-city">Município</label>
+                <input id="client-profile-city" name="city" type="text" required />
+              </div>
+              <div class="form-group">
+                <label for="client-profile-uf">UF</label>
+                <select id="client-profile-uf" name="uf" required>
+                  <option value="">UF</option>
+                  <option value="AC">AC</option>
+                  <option value="AL">AL</option>
+                  <option value="AP">AP</option>
+                  <option value="AM">AM</option>
+                  <option value="BA">BA</option>
+                  <option value="CE">CE</option>
+                  <option value="DF">DF</option>
+                  <option value="ES">ES</option>
+                  <option value="GO">GO</option>
+                  <option value="MA">MA</option>
+                  <option value="MT">MT</option>
+                  <option value="MS">MS</option>
+                  <option value="MG">MG</option>
+                  <option value="PA">PA</option>
+                  <option value="PB">PB</option>
+                  <option value="PR">PR</option>
+                  <option value="PE">PE</option>
+                  <option value="PI">PI</option>
+                  <option value="RJ">RJ</option>
+                  <option value="RN">RN</option>
+                  <option value="RS">RS</option>
+                  <option value="RO">RO</option>
+                  <option value="RR">RR</option>
+                  <option value="SC">SC</option>
+                  <option value="SP">SP</option>
+                  <option value="SE">SE</option>
+                  <option value="TO">TO</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="client-profile-site">Site</label>
+                <input id="client-profile-site" name="site" type="text" />
+              </div>
+              <div class="form-group span-all">
+                <label for="client-profile-contact-name">Nome do responsável</label>
+                <input id="client-profile-contact-name" name="contactName" type="text" required />
+              </div>
+              <div class="form-group">
+                <label for="client-profile-contact-email">Email do responsável</label>
+                <input id="client-profile-contact-email" name="contactEmail" type="email" required />
+              </div>
+              <div class="form-group">
+                <label for="client-profile-contact-phone">Telefone do responsável</label>
+                <input id="client-profile-contact-phone" name="contactPhone" type="tel" required />
+              </div>
+              <div class="form-group">
+                <label for="client-profile-size">Porte</label>
+                <select id="client-profile-size" name="size" required>
+                  <option value="">Selecione</option>
+                  <option value="MEI">MEI</option>
+                  <option value="ME">ME</option>
+                  <option value="EPP">EPP</option>
+                  <option value="Médio">Médio</option>
+                  <option value="Outro">Outro</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="client-profile-headcount">Pessoas</label>
+                <select id="client-profile-headcount" name="headcount" required>
+                  <option value="">Selecione</option>
+                  <option value="1">1</option>
+                  <option value="2-9">2–9</option>
+                  <option value="10-49">10–49</option>
+                  <option value="50-99">50–99</option>
+                  <option value="100+">100+</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="client-profile-revenue">Faturamento anual</label>
+                <select id="client-profile-revenue" name="revenue" required>
+                  <option value="">Selecione</option>
+                  <option value="0-81k">Até R$ 81 mil</option>
+                  <option value="81k-360k">R$ 81 mil a R$ 360 mil</option>
+                  <option value="360k-4.8M">R$ 360 mil a R$ 4,8 milhões</option>
+                  <option value="4.8M-20M">R$ 4,8 milhões a R$ 20 milhões</option>
+                  <option value="20M-90M">R$ 20 milhões a R$ 90 milhões</option>
+                  <option value="prefiro">Prefiro não informar</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="client-profile-sector">Setor</label>
+                <input id="client-profile-sector" name="sector" type="text" required />
+              </div>
+            </fieldset>
+            <!-- Bloco Identidade -->
+            <fieldset class="span-all">
+              <legend class="h3-tight">Identidade</legend>
+              <div class="form-group">
+                <label for="client-profile-mission">Missão</label>
+                <textarea id="client-profile-mission" name="mission" rows="2" required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="client-profile-vision">Visão</label>
+                <textarea id="client-profile-vision" name="vision" rows="2" required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="client-profile-values">Valores</label>
+                <textarea id="client-profile-values" name="values" rows="2" required></textarea>
+              </div>
+            </fieldset>
+            <!-- Bloco Mapa ESG -->
+            <fieldset class="span-all">
+              <legend class="h3-tight">Mapa ESG essencial (obrigatório)</legend>
+              <div id="client-profile-questions" class="dash-card inner"></div>
+            </fieldset>
+            <div class="form-group span-all mt-2">
+              <button class="btn btn-primary" type="button" id="client-profile-save" data-action="client-profile-save">
+                Salvar
+              </button>
+              <button class="btn btn-secondary" type="button" data-action="client-switch-section" data-section="overview">
+                Continuar
+              </button>
+              <small id="client-profile-hint" class="input-help" aria-live="polite"></small>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- OVERVIEW -->
+      <section
+        id="client-section-overview"
+        class="client-section active"
+        role="tabpanel"
+        tabindex="0"
+        aria-labelledby="client-tab-overview"
+        aria-label="Visão geral do ciclo"
+        data-panel="overview"
+      >
+        <div class="dash-card">
+          <header class="card-head">
+            <h2 class="h2-tight">Visão geral do ciclo</h2>
+          </header>
+
+          <div class="client-overview-grid">
+            <div class="dash-card inner">
+              <h3 class="h3-tight">Linha do tempo</h3>
+              <ol class="client-timeline" id="client-timeline" aria-label="Linha do tempo do ciclo" aria-live="polite">
+                <li id="client-step-activation" class="timeline-step">Ativação</li>
+                <li id="client-step-evidence" class="timeline-step">Evidências</li>
+                <li id="client-step-submission" class="timeline-step">Submissão</li>
+                <li id="client-step-review" class="timeline-step">Revisão técnica (documental)</li>
+                <li id="client-step-verification" class="timeline-step">Verificação independente</li>
+                <li id="client-step-issuance" class="timeline-step">Emissão / status</li>
+              </ol>
+            </div>
+
+            <div class="dash-card inner">
+              <h3 class="h3-tight">Prontidão para submissão</h3>
+
+              <div id="client-submit-rules" class="rules-grid" aria-label="Regras de consistência" data-empty="rules"></div>
+
+              <div class="rules-checks mt-3">
+                <label class="checkbox-line">
+                  <input id="client-declare-minimum" type="checkbox" />
+                  Declaração de evidências suficientes (ou justificativa objetiva de lacunas por pilar).
+                </label>
+
+                <label class="checkbox-line">
+                  <input id="client-declare-truth" type="checkbox" />
+                  Declaração de veracidade das informações e documentos enviados.
+                </label>
+
+                <label class="checkbox-line">
+                  <input id="client-declare-no-consultancy" type="checkbox" />
+                  Confirmação de ausência de consultoria NCS durante este ciclo.
+                </label>
+
+                <label class="checkbox-line">
+                  <input id="client-accept-terms" type="checkbox" />
+                  Ciência e aceite dos termos do ciclo (LGPD, uso do selo e responsabilidade).
+                </label>
+
+                <label class="checkbox-line">
+                  <input id="client-declare-third-party" type="checkbox" />
+                  Ciência sobre participação de terceiros (quando aplicável) e responsabilidade pela evidência enviada.
+                </label>
+              </div>
+
+              <div class="client-submit-actions mt-3">
+                <button class="btn btn-primary" type="button" data-action="client-submit">Submeter para análise</button>
+                <small id="client-submit-hint" class="input-help" aria-live="polite"></small>
+              </div>
+            </div>
+
+            <!-- Resumo de Indicadores (12 linhas) -->
+            <div class="dash-card inner span-all">
+              <h3 class="h3-tight">Indicadores do ciclo</h3>
+              <div id="client-indicators-overview" class="table-like" aria-label="Resumo dos indicadores"></div>
+              <div class="mt-2">
+                <button class="btn btn-secondary btn-small" type="button" data-action="client-switch-section" data-section="self">
+                  Ir para autoavaliação
+                </button>
+              </div>
+            </div>
+
+            <div class="dash-card inner span-all">
+              <h3 class="h3-tight">Entregas do ciclo</h3>
+
+              <div class="deliverables-grid" aria-label="Entregas e estado">
+                <div class="deliverable-card">
+                  <h4>Parecer técnico</h4>
+                  <div class="deliverable-meta">
+                    <span class="meta-chip">Versões: <span id="client-reports-count-parecer" aria-live="polite">—</span></span>
+                    <span class="meta-chip">Última atualização: <span id="client-reports-last-parecer" aria-live="polite">—</span></span>
+                  </div>
+                </div>
+
+                <div class="deliverable-card">
+                  <h4>Sumário executivo</h4>
+                  <div class="deliverable-meta">
+                    <span class="meta-chip">Versões: <span id="client-reports-count-sumario" aria-live="polite">—</span></span>
+                    <span class="meta-chip">Última atualização: <span id="client-reports-last-sumario" aria-live="polite">—</span></span>
+                  </div>
+                </div>
+
+                <div class="deliverable-card">
+                  <h4>Página pública verificável</h4>
+                  <div class="deliverable-meta">
+                    <span class="meta-chip">Link: <span id="client-public-link-short-2" aria-live="polite">—</span></span>
+                    <button class="btn btn-secondary btn-small" type="button" data-action="client-copy-public-link">Copiar link</button>
+                    <button class="btn btn-primary btn-small" type="button" data-action="client-publish-public">Publicar</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="client-cta-strip mt-3" aria-label="Ações contextuais">
+                <button class="btn btn-secondary btn-small" type="button" data-action="client-cta" data-cta="go-evidence">
+                  Enviar evidências pendentes
+                </button>
+                <button class="btn btn-secondary btn-small" type="button" data-action="client-cta" data-cta="go-self">
+                  Completar autoavaliação
+                </button>
+                <button class="btn btn-primary btn-small" type="button" data-action="client-cta" data-cta="go-submit">
+                  Preparar submissão
+                </button>
+              </div>
+
+              <small class="input-help mt-2" aria-live="polite">
+                Observação: o painel pode exibir versões <span class="text-strong">rascunho</span> durante a análise. A versão final é a emitida ao término do ciclo.
+              </small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+<!-- EVIDENCE -->
+<section
+  id="client-section-evidence"
+  class="client-section"
+  role="tabpanel"
+  tabindex="0"
+  aria-labelledby="client-tab-evidence"
+  aria-label="Envio de evidências"
+  data-panel="evidence"
+  hidden
+>
+  <div class="dash-card">
+    <header class="card-head">
+      <h2 class="h2-tight">Evidências (E/S/G)</h2>
+      <div class="section-tools" data-ux="evidence-tools" aria-label="Ferramentas de evidências"></div>
+    </header>
+
+    <div class="client-evidence-grid" aria-label="Upload por pilar">
+      <!-- =========================
+        PILAR E
+        Mantém apenas:
+        - Dropzone "Adicionar arquivos" (label)
+        - Botão "Selecionar e enviar"
+        Remove da UI:
+        - Botão nativo "Escolher arquivos" (input fica sr-only)
+        - CTA extra em empty-state (removendo data-empty do container)
+      ========================== -->
+      <div class="evidence-pillar" data-pillar="E">
+        <div class="pillar-header">
+          <h3>Ambiental (E)</h3>
+          <small id="client-evidence-help-E" class="input-help">
+            Resíduos, consumo, destinação, contratos, notas, rotina operacional.
+          </small>
+        </div>
+
+        <div class="pillar-actions">
+          <label class="file-drop" aria-describedby="client-evidence-help-E">
+            <input
+              id="client-evidence-input-E"
+              class="evidence-input sr-only"
+              type="file"
+              multiple
+              data-pillar="E"
+              aria-describedby="client-evidence-help-E"
+              accept=".pdf,.png,.jpg,.jpeg,.webp,.xls,.xlsx,.csv,.doc,.docx,.ppt,.pptx,.txt"
+            />
+            <span class="file-drop-title">Adicionar arquivos</span>
+            <span class="file-drop-sub muted">PDF, imagens, planilhas e documentos de apoio.</span>
+          </label>
+
+          <button
+            class="btn btn-primary btn-small evidence-upload-cta"
+            type="button"
+            data-action="client-evidence-select"
+            data-pillar="E"
+          >
+            Selecionar e enviar
+          </button>
+        </div>
+
+        <div
+          id="client-evidence-list-E"
+          class="evidence-list"
+          role="list"
+          aria-label="Arquivos de Ambiental"
+        ></div>
+      </div>
+
+      <!-- ========================= PILAR S ========================= -->
+      <div class="evidence-pillar" data-pillar="S">
+        <div class="pillar-header">
+          <h3>Social (S)</h3>
+          <small id="client-evidence-help-S" class="input-help">
+            Condições de trabalho, SST, treinamentos, comunidade, cadeia responsável.
+          </small>
+        </div>
+
+        <div class="pillar-actions">
+          <label class="file-drop" aria-describedby="client-evidence-help-S">
+            <input
+              id="client-evidence-input-S"
+              class="evidence-input sr-only"
+              type="file"
+              multiple
+              data-pillar="S"
+              aria-describedby="client-evidence-help-S"
+              accept=".pdf,.png,.jpg,.jpeg,.webp,.xls,.xlsx,.csv,.doc,.docx,.ppt,.pptx,.txt"
+            />
+            <span class="file-drop-title">Adicionar arquivos</span>
+            <span class="file-drop-sub muted">Dê preferência a documentos com data e autoria identificáveis.</span>
+          </label>
+
+          <button
+            class="btn btn-primary btn-small evidence-upload-cta"
+            type="button"
+            data-action="client-evidence-select"
+            data-pillar="S"
+          >
+            Selecionar e enviar
+          </button>
+        </div>
+
+        <div
+          id="client-evidence-list-S"
+          class="evidence-list"
+          role="list"
+          aria-label="Arquivos de Social"
+        ></div>
+      </div>
+
+      <!-- ========================= PILAR G ========================= -->
+      <div class="evidence-pillar" data-pillar="G">
+        <div class="pillar-header">
+          <h3>Governança (G)</h3>
+          <small id="client-evidence-help-G" class="input-help">
+            LGPD, código de conduta, políticas, compliance, atas, organograma.
+          </small>
+        </div>
+
+        <div class="pillar-actions">
+          <label class="file-drop" aria-describedby="client-evidence-help-G">
+            <input
+              id="client-evidence-input-G"
+              class="evidence-input sr-only"
+              type="file"
+              multiple
+              data-pillar="G"
+              aria-describedby="client-evidence-help-G"
+              accept=".pdf,.png,.jpg,.jpeg,.webp,.xls,.xlsx,.csv,.doc,.docx,.ppt,.pptx,.txt"
+            />
+            <span class="file-drop-title">Adicionar arquivos</span>
+            <span class="file-drop-sub muted">Evite arquivos soltos sem contexto (suba com descrição).</span>
+          </label>
+
+          <button
+            class="btn btn-primary btn-small evidence-upload-cta"
+            type="button"
+            data-action="client-evidence-select"
+            data-pillar="G"
+          >
+            Selecionar e enviar
+          </button>
+        </div>
+
+        <div
+          id="client-evidence-list-G"
+          class="evidence-list"
+          role="list"
+          aria-label="Arquivos de Governança"
+        ></div>
+      </div>
+    </div>
+
+    <div class="dash-card inner mt-4">
+      <h3 class="h3-tight">Organização do dossiê</h3>
+
+      <div class="actions-row">
+        <button
+          class="btn btn-secondary btn-small"
+          type="button"
+          data-action="client-ai"
+          data-ai="suggest-tags"
+          disabled
+          aria-disabled="true"
+          title="Disponível no piloto"
+        >
+          Sugerir temas (IA)
+        </button>
+
+        <button
+          class="btn btn-secondary btn-small"
+          type="button"
+          data-action="client-ai"
+          data-ai="suggest-mapping"
+          disabled
+          aria-disabled="true"
+          title="Disponível no piloto"
+        >
+          Sugerir mapeamento (IA)
+        </button>
+
+        <button
+          class="btn btn-secondary btn-small"
+          type="button"
+          data-action="client-ai"
+          data-ai="detect-gaps"
+          disabled
+          aria-disabled="true"
+          title="Disponível no piloto"
+        >
+          Detectar lacunas (IA)
+        </button>
+
+        <small class="input-help">Sugestões são rascunhos; o registro final é seu e fica auditável.</small>
+      </div>
+
+      <div
+        id="client-evidence-organizer"
+        class="evidence-organizer"
+        aria-label="Organizador de evidências"
+        data-ux="evidence-organizer"
+      ></div>
+    </div>
+  </div>
+</section>
+
+      <!-- SELF -->
+      <section
+        id="client-section-self"
+        class="client-section"
+        role="tabpanel"
+        tabindex="0"
+        aria-labelledby="client-tab-self"
+        aria-label="Autoavaliação guiada"
+        data-panel="self"
+        hidden
+      >
+        <div class="dash-card">
+          <header class="card-head">
+            <h2 class="h2-tight">Autoavaliação</h2>
+          </header>
+
+          <div class="self-assessment-shell">
+            <div
+              id="client-self-assessment"
+              class="self-assessment"
+              aria-label="Tabela de autoavaliação"
+              data-empty="self"
+            ></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FEEDBACK -->
+      <section
+        id="client-section-feedback"
+        class="client-section"
+        role="tabpanel"
+        tabindex="0"
+        aria-labelledby="client-tab-feedback"
+        aria-label="Devolutivas e comunicação"
+        data-panel="feedback"
+        hidden
+      >
+        <div class="dash-card">
+          <header class="card-head">
+            <h2 class="h2-tight">Devolutivas</h2>
+            <p class="muted mt-1 mb-0">Mensagens, pedidos de ajuste e respostas ficam registradas e auditáveis.</p>
+          </header>
+
+          <div class="feedback-grid">
+            <div class="dash-card inner">
+              <h3 class="h3-tight">Devolutivas recebidas</h3>
+              <div
+                id="client-feedback-inbox"
+                class="feedback-inbox"
+                aria-label="Lista de devolutivas"
+                aria-live="polite"
+                data-empty="feedback"
+              >
+                <p class="empty-state">Nenhuma devolutiva no momento. Após a revisão técnica, devolutivas aparecerão aqui.</p>
+              </div>
+            </div>
+
+            <div class="dash-card inner span-all">
+              <h3 class="h3-tight">Responder devolutiva</h3>
+
+              <form id="client-reply-form" class="form-grid" data-ux="reply-form">
+                <div class="form-group">
+                  <label for="client-reply-reference">Referência (opcional)</label>
+                  <input
+                    id="client-reply-reference"
+                    name="reply_reference"
+                    type="text"
+                    placeholder="Ex.: ID da devolutiva, indicador ou pilar (E/S/G)"
+                    autocomplete="off"
+                  />
+                </div>
+
+                <div class="form-group span-all">
+                  <label for="client-reply-message">Sua resposta</label>
+                  <textarea
+                    id="client-reply-message"
+                    name="reply_message"
+                    rows="4"
+                    placeholder="Descreva o ajuste feito e onde está a evidência…"
+                  ></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label for="client-reply-attachment">Anexo (opcional)</label>
+                  <input
+                    id="client-reply-attachment"
+                    name="reply_attachment"
+                    type="file"
+                    accept=".pdf,.png,.jpg,.jpeg,.webp,.xls,.xlsx,.csv,.doc,.docx,.ppt,.pptx,.txt"
+                  />
+                  <small class="input-help">No protótipo, anexos podem ser simulados.</small>
+                </div>
+
+                <div class="form-actions span-all">
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    data-action="client-send-reply"
+                    disabled
+                    aria-disabled="true"
+                    title="Disponível no piloto"
+                  >
+                    Enviar resposta
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <div class="dash-card inner span-all">
+              <h3 class="h3-tight">Recurso / contestação</h3>
+
+              <form id="client-appeal-form" class="form-grid" data-ux="appeal-form">
+                <div class="form-group">
+                  <label for="client-appeal-subject">Assunto</label>
+                  <input
+                    id="client-appeal-subject"
+                    name="appeal_subject"
+                    type="text"
+                    placeholder="Ex.: Contestação de devolutiva / Divergência de interpretação"
+                    autocomplete="off"
+                  />
+                </div>
+
+                <div class="form-group span-all">
+                  <label for="client-appeal-message">Descrição do recurso</label>
+                  <textarea
+                    id="client-appeal-message"
+                    name="appeal_message"
+                    rows="4"
+                    placeholder="Explique a contestação, cite evidências e pontos objetivos…"
+                  ></textarea>
+                </div>
+
+                <div class="form-actions span-all">
+                  <button
+                    class="btn btn-secondary"
+                    type="button"
+                    data-action="client-open-appeal"
+                    disabled
+                    aria-disabled="true"
+                    title="Disponível no piloto"
+                  >
+                    Registrar recurso
+                  </button>
+                </div>
+              </form>
+
+              <div
+                id="client-appeals-list"
+                class="appeals-list"
+                aria-label="Recursos registrados"
+                data-empty="appeals"
+              >
+                <p class="empty-state">Nenhum recurso registrado ainda. Se tiver divergências após as devolutivas, registre um recurso aqui.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- REPORTS -->
+      <section
+        id="client-section-reports"
+        class="client-section"
+        role="tabpanel"
+        tabindex="0"
+        aria-labelledby="client-tab-reports"
+        aria-label="Entregas e downloads"
+        data-panel="reports"
+        hidden
+      >
+        <div class="dash-card">
+          <header class="card-head">
+            <h2 class="h2-tight">Entregas do ciclo</h2>
+            <p class="muted mt-1 mb-0">
+              O preview pode exibir versões em progresso. A versão final é a emitida ao término do ciclo.
+            </p>
+          </header>
+
+          <div id="client-deliverables-preview" class="mt-2" aria-live="polite"></div>
+
+          <div class="actions-row mt-2">
+            <button
+              class="btn btn-primary btn-small"
+              type="button"
+              data-action="client-generate-report"
+              data-type="sumario"
+            >
+              Sumário executivo (download)
+            </button>
+
+            <details class="other-downloads">
+              <summary>Outros downloads</summary>
+              <div class="other-download-buttons">
+                <button
+                  class="btn btn-secondary btn-small mt-1"
+                  type="button"
+                  data-action="client-generate-report"
+                  data-type="parecer"
+                >
+                  Parecer técnico
+                </button>
+                <button
+                  class="btn btn-secondary btn-small mt-1"
+                  type="button"
+                  data-action="client-generate-report"
+                  data-type="html"
+                >
+                  Dossiê completo
+                </button>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEAL -->
+      <section
+        id="client-section-seal"
+        class="client-section"
+        role="tabpanel"
+        tabindex="0"
+        aria-labelledby="client-tab-seal"
+        aria-label="Selo e link verificável"
+        data-panel="seal"
+        hidden
+      >
+        <div class="dash-card">
+          <header class="card-head">
+            <h2 class="h2-tight">Selo &amp; link</h2>
+          </header>
+
+          <!-- IDs essenciais realocados aqui (UI clean no topo) -->
+          <div class="dash-meta muted mt-1" aria-label="Escopo, permissão e link verificável">
+            <span class="meta-label">Escopo:</span>
+            <span id="client-scope" class="meta-value" aria-live="polite">—</span>
+            <span class="dot-sep" aria-hidden="true">•</span>
+
+            <span class="meta-label">Uso do selo:</span>
+            <span id="client-seal-permission" class="meta-value" aria-live="polite">—</span>
+            <span class="dot-sep" aria-hidden="true">•</span>
+
+            <span class="meta-label">Link verificável:</span>
+            <span id="client-public-link-short" class="meta-value" aria-live="polite">—</span>
+
+            <button class="btn btn-secondary btn-small" type="button" data-action="client-copy-public-link">
+              Copiar link
+            </button>
+          </div>
+
+          <!-- Placeholder mantido (evita null no JS se houver bind/atualização do mini) -->
+          <div id="client-seal-mini" class="seal-card" hidden aria-hidden="true"></div>
+
+          <div id="client-seal-card" class="seal-card" aria-label="Cartão do selo" data-empty="seal"></div>
+          <small class="input-help" aria-live="polite">O link verificável sustenta a leitura pública do ciclo.</small>
+
+          <div class="actions-row mt-2">
+            <button
+              id="client-seal-download-btn"
+              class="btn btn-primary btn-small"
+              type="button"
+              data-action="client-generate-report"
+              data-type="selo"
+              disabled
+              aria-disabled="true"
+            >
+              Baixar certificado
+            </button>
+            <small id="client-seal-download-hint" class="input-help ml-2"></small>
+          </div>
+        </div>
+      </section>
+
+      <!-- PLAN -->
+      <section
+        id="client-section-plan"
+        class="client-section"
+        role="tabpanel"
+        tabindex="0"
+        aria-labelledby="client-tab-plan"
+        aria-label="Plano de ação"
+        data-panel="plan"
+        hidden
+      >
+        <div class="dash-card">
+          <header class="card-head">
+            <h2 class="h2-tight">Plano de ação</h2>
+            <p class="muted mt-1 mb-0">
+              O plano de ação é interno: ajuda a fechar lacunas e organizar prioridades por pilar/indicador.
+            </p>
+          </header>
+
+          <div id="client-plan-shell" data-empty="plan"></div>
+
+          <div class="mt-2" id="client-plan-preview" aria-live="polite"></div>
+          <div class="actions-row mt-2">
+            <button
+              class="btn btn-primary btn-small"
+              type="button"
+              data-action="client-generate-report"
+              data-type="plano"
+            >
+              Baixar plano de ação
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- AUDIT -->
+      <section
+        id="client-section-audit"
+        class="client-section"
+        role="tabpanel"
+        tabindex="0"
+        aria-labelledby="client-tab-audit"
+        aria-label="Trilha do processo"
+        data-panel="audit"
+        hidden
+      >
+        <div class="dash-card">
+          <header class="card-head">
+            <h2 class="h2-tight">Trilha do processo</h2>
+            <p class="muted mt-1 mb-0">
+              Registro interno de eventos do ciclo (submissão, devolutivas, respostas, versões e decisões).
+            </p>
+          </header>
+
+          <div class="dash-card inner">
+            <div class="actions-row">
+              <button
+                class="btn btn-secondary btn-small"
+                type="button"
+                data-action="client-refresh-audit"
+                disabled
+                aria-disabled="true"
+                title="Disponível no piloto"
+              >
+                Atualizar
+              </button>
+
+              <button class="btn btn-secondary btn-small" type="button" data-action="client-export-audit">
+                Exportar log
+              </button>
+            </div>
+
+            <div id="client-audit-timeline" class="audit-timeline mt-3" data-empty="audit"></div>
+            <small id="client-custody-hint" class="input-help" aria-live="polite"></small>
+          </div>
+        </div>
+      </section>
+
+      <!-- /PANELS -->
+    </div>
+    <!-- /PAINEL -->
+  </div>
+  <!-- /SHELL -->
+</div>
+<!-- /VIEW -->

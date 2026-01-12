@@ -1,0 +1,43 @@
+/* ==========================================================================
+   NCS — Base — reset.css
+   - Reset leve + normalizações seguras
+   ========================================================================== */
+
+@layer base {
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+:where(img, svg, video, canvas) {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+:where(iframe) { border: 0; }
+
+:where(button, input, select, textarea) {
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+}
+
+:where(button, [type="button"], [type="submit"], [role="button"]) { cursor: pointer; }
+:where(button:disabled, [disabled]) { cursor: not-allowed; }
+
+:where(a) {
+  color: inherit;
+  text-underline-offset: 0.18em;
+  text-decoration-skip-ink: auto;
+
+  /* fallback + moderno (color-mix) */
+  text-decoration-color: rgba(11, 106, 166, 0.42);
+  text-decoration-color: color-mix(in srgb, var(--color-accent, #0b6aa6) 42%, transparent);
+}
+:where(a:hover) {
+  text-decoration-color: rgba(11, 106, 166, 0.70);
+  text-decoration-color: color-mix(in srgb, var(--color-accent, #0b6aa6) 70%, transparent);
+}
+
+}

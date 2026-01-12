@@ -1,0 +1,44 @@
+/* ==========================================================================
+   NCS — Pages — auth.css
+   Fonte: split de styles/pages.css (v5.0)
+   ========================================================================== */
+
+@layer pages {
+/* ==========================================================================
+   NCS — Pages (v5.0 CONSOLIDADO / LIMPO / MODULAR)
+   Estilos específicos por página: Landing, Auth, Client Dashboard, Auditor Dashboard.
+
+   Diretriz:
+   - Componentes reutilizáveis ficam em components.css (cards, botões, navbar, listas, etc.)
+   - pages.css cuida de ritmo de seções, containers e grids por página (sempre escopado)
+   ========================================================================== */
+
+/* Utilitário pontual (títulos com quebra controlada) */
+.hero-title-line { display: block; }
+
+/* --------------------------------------------------------------------------
+   14) Auth pages (login/registro)
+   -------------------------------------------------------------------------- */
+
+.auth-container {
+  width: min(560px, var(--container-w));
+  margin: calc(var(--header-h) + var(--s-10)) auto var(--s-12);
+}
+
+.auth-form { padding: var(--s-7); }
+
+@media (max-width: 520px) {
+  .auth-form { padding: var(--s-6); }
+}
+
+.auth-title { margin: 0 0 var(--s-1); }
+
+.auth-subtitle,
+.auth-intro {
+  margin: 0 0 var(--s-6);
+  color: var(--color-muted);
+}
+
+.auth-tab-content { display: none; }
+.auth-tab-content.active { display: block; }
+}

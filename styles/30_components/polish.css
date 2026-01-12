@@ -1,0 +1,52 @@
+/* ==========================================================================
+   NCS — Components — polish.css
+   Fonte: split de styles/components.css (v5.0.1)
+   ========================================================================== */
+
+@layer components {
+/* --------------------------------------------------------------------------
+   22) Polish patches (NON-BREAKING)
+   - Focus: acabamento de produto (cards/sections)
+   - Touch: remove hover transform em devices sem hover
+   - Print: remove overlays (chat/toast/cookie)
+   -------------------------------------------------------------------------- */
+
+/* “acabamento” de foco nos cards/superfícies */
+:where(
+  .dash-card,
+  .step-card,
+  .featured-card,
+  .value-card,
+  .pricing-card,
+  .indicator-simple-card,
+  .level-card,
+  .deliverable-card,
+  .queue-section,
+  .detail-section
+):focus-within {
+  border-color: rgba(11, 106, 166, 0.28);
+  box-shadow: 0 0 0 4px rgba(11, 106, 166, 0.12), var(--shadow-2);
+}
+
+/* Process item: foco explícito quando vira “selecionável” via teclado */
+.process-item:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(11, 106, 166, 0.14), var(--shadow-2);
+}
+
+/* Touch devices: remove transform de hover (evita tremedeira/hover “preso”) */
+@media (hover: none) {
+  .btn:hover,
+  .nav-menu a:hover,
+  .process-item:hover,
+  .dash-card:hover,
+  .chat-fab:hover,
+  .chat-open-button:hover,
+  .evidence-item:hover,
+  .file-drop:hover,
+  .chat-faq-item:hover {
+    transform: none;
+  }
+}
+
+}

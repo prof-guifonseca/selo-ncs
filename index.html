@@ -1,0 +1,63 @@
+<!-- ============================================================
+  index.html — NCS (Front) — SHELL (partials)
+  Objetivo: manter apenas o esqueleto aqui; conteúdo por seções em /partials.
+  Regras: IDs e data-actions preservados; sem duplicações; sem código morto.
+============================================================ -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <!-- include: head -->
+  </head>
+
+  <!-- Fonte única do API base (contrato): o SHELL define, o bootstrap só lê. -->
+  <body data-api-base="/api">
+    <!-- include: a11y -->
+    <!-- include: icon-sprite -->
+
+    <!-- include: navbar -->
+
+    <main id="main-content" role="main">
+      <!-- =========================
+        VIEW: Landing
+      ========================== -->
+      <div id="landing-view" class="view active" data-view="landing">
+        <!-- include: landing-hero -->
+        <!-- include: landing-ncs -->
+        <!-- include: landing-how-it-works -->
+        <!-- include: landing-deliverables -->
+        <!-- include: landing-value-proposition -->
+        <!-- include: landing-indicators -->
+        <!-- include: landing-levels -->
+        <!-- include: landing-pricing -->
+        <!-- include: landing-impartiality -->
+      </div>
+
+      <!-- =========================
+        VIEW: Login (Cliente)
+      ========================== -->
+      <!-- include: login-client-view -->
+
+      <!-- As áreas de login de Avaliador e Gestor foram consolidadas na mesma view de login.
+           Os includes originais (login-auditor-view e admin-login) foram removidos. -->
+
+      <!-- =========================
+        Views: Dashboards
+      ========================== -->
+      <!-- include: client-dashboard -->
+      <!-- include: auditor-dashboard -->
+      <!-- include: admin-dashboard -->
+      <!-- admin-memberships view removido: o conteúdo de administração foi
+           incorporado ao painel do gestor (admin-dashboard). -->
+    </main>
+
+    <!-- include: chat -->
+    <!-- include: modal -->
+    <!-- include: footer -->
+    <!-- include: noscript -->
+
+    <!-- Bootstrap da SPA:
+         - Lê data-api-base/meta e publica window.NCS_API_BASE (sem inline).
+         - Inicializa navbar, router, actions, chat e auth. -->
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>

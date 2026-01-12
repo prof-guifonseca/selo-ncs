@@ -1,0 +1,46 @@
+# RLS PROBE RESULT
+
+Data/Hora: ____________________________ (-0300)
+PROBE_API_BASE: ________________________
+Commit hash (se aplicável): ____________
+Snapshot (ZIP sha256, se aplicável): ___
+
+> Nota de sigilo: este arquivo **não** pode conter tokens/JWTs, cookies, keys ou secrets.
+
+## Inputs (sem segredos)
+
+- Tenant A (email): ____________________
+- Processo A (id): _____________________
+- Tenant B (email): ____________________
+- Processo B (id): _____________________
+
+## Execução
+
+- Modo:
+  - [ ] Script (`node scripts/rls_probe.mjs`) — Bearer (staging não-prod)
+  - [ ] Manual (curl + cookie jar) — ver `PROBE_MANUAL_CURL.md`
+- Comando (sem tokens):
+  - `node scripts/rls_probe.mjs`
+- Observações:
+  - ______________________________________________________________
+
+## Output (cole aqui a saída do probe)
+
+```
+<cole aqui o output (PASS/FAIL + status codes), sem comandos que revelem segredos>
+```
+
+## Interpretação esperada
+
+- `same-tenant-A` → **PASS** (200)
+- `same-tenant-B` → **PASS** (200)
+- `cross-tenant-A-as-B` → **PASS** (bloqueio: 401/403/404)
+- `cross-tenant-B-as-A` → **PASS** (bloqueio: 401/403/404)
+
+## Resultado final
+
+- [ ] PASS
+- [ ] FAIL
+
+Resumo (1–3 linhas):
+______________________________________________________________

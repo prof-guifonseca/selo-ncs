@@ -1,0 +1,177 @@
+/* ==========================================================================
+   NCS — Design System v1 — Tokens Semânticos
+   - Mapeia primitivos em intenções de UI (bg/surface/text/border/focus)
+   - Mantém aliases legados (compatibilidade com CSS existente)
+   - “Aurora Cívica”: fundo suave + gradientes discretos
+   ========================================================================== */
+
+@layer tokens {
+:root {
+  /* ------------------------------------------------------------------------
+     Base semântico
+     ------------------------------------------------------------------------ */
+
+  --color-bg: var(--n-1);
+  --color-surface: var(--n-0);
+  --color-surface-2: var(--n-2);
+  --color-surface-3: var(--n-3);
+
+  --color-text: var(--ink-0);
+  --color-text-2: var(--muted-0);
+  --color-muted: var(--muted-1);
+
+  --color-line: var(--line-0);
+  --color-line-strong: var(--line-1);
+  --color-overlay: var(--overlay-0);
+
+  /* Brand/accent (semântico) — retem compat com legado */
+  --color-brand: var(--brand-0);
+  --color-brand-ink: var(--brand-2);
+  --color-accent: var(--accent-0);
+
+  /* Estados */
+  --color-success: var(--success-0);
+  --color-warning: var(--warn-0);
+  --color-danger: var(--danger-0);
+  --color-info: var(--info-0);
+
+  /* Texto sobre fundos fortes */
+  --color-on-brand: #ffffff;
+  --color-on-accent: #ffffff;
+  --color-on-success: #ffffff;
+  --color-on-warning: var(--ink-0);
+  --color-on-danger: #ffffff;
+  --color-on-info: #ffffff;
+
+  /* ------------------------------------------------------------------------
+     Interações / foco
+     ------------------------------------------------------------------------ */
+
+  --focus-ring: rgba(11, 106, 166, 0.38);
+  --focus-ring-strong: rgba(11, 106, 166, 0.60);
+
+  /* aliases legados usados no CSS existente */
+  --focus: var(--focus-ring);
+  --focus-strong: var(--focus-ring-strong);
+
+  /* Interactives (DS v1) */
+  --interactive: var(--color-accent);
+  --interactive-hover: var(--accent-1);
+  --interactive-pressed: var(--accent-2);
+
+  /* ------------------------------------------------------------------------
+     Tints / Soft surfaces (fallback seguro + upgrade com color-mix)
+     ------------------------------------------------------------------------ */
+
+  --color-brand-soft: rgba(44, 122, 87, 0.10);
+  --color-brand-soft-border: rgba(44, 122, 87, 0.18);
+
+  --color-accent-soft: rgba(11, 106, 166, 0.08);
+  --color-accent-soft-border: rgba(11, 106, 166, 0.18);
+
+  --color-success-soft: rgba(44, 122, 87, 0.10);
+  --color-success-soft-border: rgba(44, 122, 87, 0.18);
+
+  --color-warning-soft: rgba(240, 162, 2, 0.14);
+  --color-warning-soft-border: rgba(240, 162, 2, 0.22);
+
+  --color-danger-soft: rgba(217, 45, 90, 0.10);
+  --color-danger-soft-border: rgba(217, 45, 90, 0.20);
+
+  --color-info-soft: rgba(11, 106, 166, 0.10);
+  --color-info-soft-border: rgba(11, 106, 166, 0.20);
+
+  /* Legado útil */
+  --accent-soft: var(--color-accent-soft);
+  --warn-soft: var(--color-warning-soft);
+
+  /* ------------------------------------------------------------------------
+     Gradientes / Aurora
+     ------------------------------------------------------------------------ */
+
+  /* Watermark central (landing) */
+  --hero-watermark-image: url("../images/logo-hero.png");
+
+  /* Hero existente (mantido como token para evitar regressão) */
+  --grad-hero:
+    radial-gradient(1200px 600px at 20% 0%, rgba(11, 106, 166, 0.10), rgba(11, 106, 166, 0.00) 55%),
+    radial-gradient(900px 500px at 90% 10%, rgba(44, 122, 87, 0.10), rgba(44, 122, 87, 0.00) 55%),
+    linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+
+  --grad-card: linear-gradient(180deg, rgba(11, 106, 166, 0.10) 0%, rgba(11, 106, 166, 0.00) 65%);
+  --grad-chip: linear-gradient(180deg, rgba(11, 106, 166, 0.10) 0%, rgba(44, 122, 87, 0.08) 100%);
+
+  /* Fundo global premium (Aurora Cívica) */
+  --grad-aurora:
+    radial-gradient(1100px 700px at 14% 8%, rgba(11, 106, 166, 0.10), rgba(11, 106, 166, 0.00) 60%),
+    radial-gradient(1000px 620px at 92% 14%, rgba(44, 122, 87, 0.10), rgba(44, 122, 87, 0.00) 60%),
+    radial-gradient(900px 540px at 52% 92%, rgba(217, 45, 90, 0.06), rgba(217, 45, 90, 0.00) 58%),
+    linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+
+  --app-bg: var(--grad-aurora);
+
+  /* Superfície "glass" (navbar premium) */
+  --surface-glass: rgba(255, 255, 255, 0.72);
+  --surface-glass-border: rgba(11, 18, 32, 0.12);
+}
+
+/* Upgrade: color-mix quando disponível */
+@supports (color: color-mix(in srgb, #000 10%, transparent)) {
+  :root {
+    --color-brand-soft: color-mix(in srgb, var(--color-brand) 10%, transparent);
+    --color-brand-soft-border: color-mix(in srgb, var(--color-brand) 18%, transparent);
+
+    --color-accent-soft: color-mix(in srgb, var(--color-accent) 8%, transparent);
+    --color-accent-soft-border: color-mix(in srgb, var(--color-accent) 18%, transparent);
+
+    --color-success-soft: color-mix(in srgb, var(--color-success) 10%, transparent);
+    --color-success-soft-border: color-mix(in srgb, var(--color-success) 18%, transparent);
+
+    --color-warning-soft: color-mix(in srgb, var(--color-warning) 14%, transparent);
+    --color-warning-soft-border: color-mix(in srgb, var(--color-warning) 22%, transparent);
+
+    --color-danger-soft: color-mix(in srgb, var(--color-danger) 10%, transparent);
+    --color-danger-soft-border: color-mix(in srgb, var(--color-danger) 20%, transparent);
+
+    --color-info-soft: color-mix(in srgb, var(--color-info) 10%, transparent);
+    --color-info-soft-border: color-mix(in srgb, var(--color-info) 20%, transparent);
+
+    --focus-ring: color-mix(in srgb, var(--color-accent) 38%, transparent);
+    --focus-ring-strong: color-mix(in srgb, var(--color-accent) 60%, transparent);
+  }
+}
+
+/* Tema (light-only por enquanto; preparado para evoluir) */
+html,
+html[data-theme="light"] {
+  color-scheme: light;
+}
+html[data-theme="dark"] {
+  /* Preparado (sem mentir sobre dark); mantém light */
+  color-scheme: light;
+}
+
+/* Aliases legados (compat total) */
+:root {
+  --bg: var(--color-bg);
+  --surface: var(--color-surface);
+  --surface-2: var(--color-surface-2);
+  --card: var(--color-surface);
+
+  --text: var(--color-text);
+  --muted: var(--color-muted);
+
+  --line: var(--color-line);
+  --line-strong: var(--color-line-strong);
+  --overlay: var(--color-overlay);
+
+  --primary: var(--color-brand);
+  --primary-dark: var(--brand-1);
+  --secondary: var(--color-accent);
+
+  --success: var(--color-success);
+  --warning: var(--color-warning);
+  --danger: var(--color-danger);
+  --info: var(--color-info);
+}
+}

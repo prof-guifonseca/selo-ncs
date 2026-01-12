@@ -1,0 +1,5 @@
+
+> ncs-selo@1.2.0 contract:front
+> node scripts/contract_front.mjs
+
+[contract:front] OK — 3 views privadas, 67 actions, 5 views navegáveis, 14 modais, 6 IDs críticos.

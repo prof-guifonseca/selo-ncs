@@ -1,0 +1,47 @@
+/* ==========================================================================
+   NCS — Components — kpi.css
+   Fonte: split de styles/components.css (v5.0.1)
+   ========================================================================== */
+
+@layer components {
+/* --------------------------------------------------------------------------
+   12) KPI widgets
+   -------------------------------------------------------------------------- */
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s-3);
+  padding: var(--s-4) var(--s-5);
+}
+
+.kpi-item {
+  background: var(--color-surface);
+  border: 1px solid rgba(11, 18, 32, 0.08);
+  border-radius: var(--r-2);
+  padding: var(--s-3);
+}
+
+.kpi-value {
+  display: block;
+  font-size: var(--fs-5);
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.03em;
+  color: var(--color-brand-ink);
+  line-height: var(--lh-tight);
+}
+
+.kpi-label {
+  display: block;
+  font-size: var(--fs-00);
+  color: var(--color-muted);
+  margin-top: 0.15rem;
+}
+
+@media (max-width: 720px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+}

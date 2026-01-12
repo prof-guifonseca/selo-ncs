@@ -1,0 +1,94 @@
+/* ==========================================================================
+   NCS — Design System v1 — Themes (por role)
+   - Sem JS novo: apenas lê body[data-role]
+   - Altera brand/accent + foco e pequenos tokens auxiliares
+   - Preserva contraste e compatibilidade do CSS existente
+   ========================================================================== */
+
+@layer tokens {
+
+/* Default (public/guest) */
+body:not([data-role]),
+body[data-role="public"],
+body[data-role="guest"] {
+  /* Mantém a identidade base */
+  --brand-0: #2c7a57;
+  --brand-1: #1f5d45;
+  --brand-2: #134133;
+
+  --accent-0: #0b6aa6;
+  --accent-1: #085a8f;
+  --accent-2: #064770;
+
+  /* Sincroniza semânticos */
+  --color-brand: var(--brand-0);
+  --color-brand-ink: var(--brand-2);
+  --color-accent: var(--accent-0);
+
+  --interactive: var(--color-accent);
+  --interactive-hover: var(--accent-1);
+  --interactive-pressed: var(--accent-2);
+}
+
+/* Client (participante) — verde + azul (padrão) */
+body[data-role="client"] {
+  --brand-0: #2c7a57;
+  --brand-1: #1f5d45;
+  --brand-2: #134133;
+
+  --accent-0: #0b6aa6;
+  --accent-1: #085a8f;
+  --accent-2: #064770;
+
+  --color-brand: var(--brand-0);
+  --color-brand-ink: var(--brand-2);
+  --color-accent: var(--accent-0);
+}
+
+/* Auditor — inverte: brand azul (autoridade técnica), accent verde (impacto) */
+body[data-role="auditor"] {
+  --brand-0: #0b6aa6;
+  --brand-1: #085a8f;
+  --brand-2: #064770;
+
+  --accent-0: #2c7a57;
+  --accent-1: #1f5d45;
+  --accent-2: #134133;
+
+  --color-brand: var(--brand-0);
+  --color-brand-ink: var(--brand-2);
+  --color-accent: var(--accent-0);
+}
+
+/* Admin — brand roxo discreto (governança), accent azul */
+body[data-role="admin"] {
+  --brand-0: #6d28d9;
+  --brand-1: #5b21b6;
+  --brand-2: #3b1681;
+
+  --accent-0: #0b6aa6;
+  --accent-1: #085a8f;
+  --accent-2: #064770;
+
+  --color-brand: var(--brand-0);
+  --color-brand-ink: var(--brand-2);
+  --color-accent: var(--accent-0);
+
+  --color-on-brand: #ffffff;
+}
+
+/* Upgrade: reforça foco e tints com color-mix quando disponível */
+@supports (color: color-mix(in srgb, #000 10%, transparent)) {
+  body[data-role] {
+    --focus-ring: color-mix(in srgb, var(--color-accent) 38%, transparent);
+    --focus-ring-strong: color-mix(in srgb, var(--color-accent) 60%, transparent);
+
+    --color-brand-soft: color-mix(in srgb, var(--color-brand) 10%, transparent);
+    --color-brand-soft-border: color-mix(in srgb, var(--color-brand) 18%, transparent);
+
+    --color-accent-soft: color-mix(in srgb, var(--color-accent) 8%, transparent);
+    --color-accent-soft-border: color-mix(in srgb, var(--color-accent) 18%, transparent);
+  }
+}
+
+}

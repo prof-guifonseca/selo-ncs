@@ -1,0 +1,65 @@
+<!-- ============================================================
+  PARTIAL: head.html (ou equivalente do seu include: head)
+  Correção do favicon após index virar SHELL:
+  - Garanta que ESTES <link> estejam DENTRO do <head>.
+  - Use caminho relativo (sem barra inicial) para funcionar em / e em rotas hash.
+============================================================ -->
+
+<!-- =========================
+  Meta / SEO / Social
+========================== -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<meta name="ncs-enable-chat-ai" content="false" />
+<meta name="color-scheme" content="light" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
+<!-- Descrição padrão neutra: não menciona marcas específicas.  Esta descrição é
+     reutilizada nas metas OG/Twitter quando a marca não define seu próprio
+     texto.  Ajuste o conteúdo conforme a mensagem institucional desejada. -->
+<meta
+  name="description"
+  content="Programa de verificação independente para micro e pequenas empresas: organização de evidências por E/S/G, dossiê rastreável, dupla avaliação independente e parecer técnico."
+/>
+<meta name="theme-color" content="#2c7a57" />
+
+<!-- Título neutro que será sobrescrito pelo runtime da marca quando aplicável -->
+<title>Programa de Verificação Independente</title>
+
+<!-- Canonical genérico (sem domínio fixo) para evitar vazamento de marca -->
+<link rel="canonical" href="/" />
+
+<!-- =========================
+  Favicon (FIX)
+  - Use os 2 links abaixo (ico + png) para máxima compatibilidade.
+  - Caminho: images/ncs-logo.png
+========================== -->
+<link rel="icon" href="images/ncs-logo.png" type="image/png" />
+<link rel="shortcut icon" href="images/ncs-logo.png" type="image/png" />
+<link rel="apple-touch-icon" href="images/ncs-logo.png" />
+<meta name="msapplication-TileImage" content="images/ncs-logo.png" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<!-- As tags OG abaixo usam IDs estáveis e conteúdo neutro.  O runtime de
+     marca (applyBrandRuntime) atualizará estes campos dinamicamente. -->
+<meta id="meta-og-title" property="og:title" content="Programa de Verificação Independente" />
+<meta id="meta-og-desc" property="og:description" content="Programa de verificação independente para micro e pequenas empresas: evidências E/S/G, dossiê rastreável, dupla avaliação independente e parecer técnico." />
+<meta id="meta-og-url" property="og:url" content="" />
+<meta id="meta-og-site" property="og:site_name" content="Programa de Verificação Independente" />
+<meta id="meta-og-image" property="og:image" content="images/logo-hero.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta id="meta-twitter-title" name="twitter:title" content="Programa de Verificação Independente" />
+<meta id="meta-twitter-desc" name="twitter:description" content="Programa de verificação independente para micro e pequenas empresas: evidências E/S/G, dossiê rastreável, dupla avaliação independente e parecer técnico." />
+<meta id="meta-twitter-image" name="twitter:image" content="images/logo-hero.png" />
+
+<!-- Backend: base de API (lido pelo JS) -->
+<meta name="ncs-api-base" content="/.netlify/functions/" />
+
+<!-- Stylesheets -->
+<link rel="stylesheet" href="styles/main.css?v=5.1.0" />

@@ -1,0 +1,95 @@
+/* ==========================================================================
+   NCS — Components — table.css
+   Fonte: split de styles/components.css (v5.0.1)
+   ========================================================================== */
+
+@layer components {
+/* --------------------------------------------------------------------------
+   10) Tables
+   -------------------------------------------------------------------------- */
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.dash-table,
+.indicators-table {
+  width: 100%;
+  border: 1px solid var(--color-line);
+  border-radius: var(--r-2);
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.dash-table thead th,
+.indicators-table thead th {
+  text-align: left;
+  font-size: var(--fs-0);
+  color: var(--color-muted);
+  background: var(--color-surface-2);
+  border-bottom: 1px solid var(--color-line);
+  padding: 0.75rem;
+}
+
+.dash-table tbody td,
+.indicators-table tbody td {
+  padding: 0.75rem;
+  border-bottom: 1px solid rgba(11, 18, 32, 0.06);
+  vertical-align: top;
+}
+
+.dash-table tbody tr:hover,
+.indicators-table tbody tr:hover {
+  background: rgba(11, 106, 166, 0.06);
+}
+
+.dash-table tbody tr:last-child td,
+.indicators-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.indicators-table .indicator-note {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: var(--s-3);
+  border-radius: var(--r-2);
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  resize: vertical;
+}
+
+/* Self-assessment table helpers */
+.self-summary .meta-chip {
+  margin-right: 0.5rem;
+}
+
+.self-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.self-table th,
+.self-table td {
+  border-bottom: 1px solid var(--color-line);
+  vertical-align: top;
+  padding: 0.75rem;
+}
+.self-table th {
+  text-align: left;
+  font-weight: var(--fw-semibold);
+}
+.self-answer,
+.self-note,
+.self-evidence {
+  width: 100%;
+}
+.self-note {
+  resize: vertical;
+  min-height: 2.75rem;
+}
+.self-row-hint {
+  margin-top: 0.35rem;
+}
+
+}

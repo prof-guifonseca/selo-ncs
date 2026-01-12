@@ -1,0 +1,26 @@
+/*
+ * Marca de demonstração para o Selo NCS.
+ *
+ * Este arquivo redefine algumas variáveis CSS do design system para
+ * diferenciar visualmente a marca demo.  É intencionalmente simples:
+ * apenas cores principais e de destaque são alteradas.  Demais tokens
+ * permanecem como no tema padrão.
+ */
+
+@layer tokens {
+  :root {
+    /* Tons de marca (roxo escuro) */
+    --brand-0: #7a2c7a;
+    --brand-1: #5d1f5d;
+    --brand-2: #411341;
+
+    /* Tons de destaque (magenta) */
+    --accent-0: #a60b6a;
+    --accent-1: #8f085a;
+    --accent-2: #700647;
+
+    /* Mantém ajuste de altura do logo da navbar igual aos tokens padrão. */
+    --navbar-logo-h-ncs: var(--navbar-logo-h);
+    --navbar-logo-h-intuel: var(--navbar-logo-h);
+  }
+}

@@ -1,0 +1,162 @@
+/* ==========================================================================
+   NCS — Components — card.css
+   Fonte: split de styles/components.css (v5.0.1)
+   ========================================================================== */
+
+@layer components {
+/* --------------------------------------------------------------------------
+   4) Cards & surfaces
+   -------------------------------------------------------------------------- */
+
+:where(
+  .dash-card,
+  .step-card,
+  .featured-card,
+  .value-card,
+  .pricing-card,
+  .indicator-simple-card,
+  .level-card,
+  .deliverable-card
+) {
+  background: var(--color-surface);
+  border: 1px solid var(--dash-border-color, var(--color-line));
+  border-radius: var(--r-3);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+  transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
+}
+
+.dash-card:hover {
+  box-shadow: var(--shadow-2);
+  transform: translateY(-2px);
+}
+
+/* Padding defensivo: quando o card recebe conteúdo “cru” (sem wrappers) */
+:where(
+  .dash-card,
+  .step-card,
+  .featured-card,
+  .value-card,
+  .pricing-card,
+  .indicator-simple-card,
+  .level-card,
+  .deliverable-card
+)
+  > :where(
+    h1,
+    h2,
+    h3,
+    h4,
+    p,
+    ul,
+    ol,
+    dl,
+    table,
+    form,
+    fieldset,
+    details,
+    .bullet-list,
+    .callout,
+    span,
+    button
+  ) {
+  padding-inline: var(--s-5);
+}
+
+:where(
+  .dash-card,
+  .step-card,
+  .featured-card,
+  .value-card,
+  .pricing-card,
+  .indicator-simple-card,
+  .level-card,
+  .deliverable-card
+)
+  > :where(
+    h1,
+    h2,
+    h3,
+    h4,
+    p,
+    ul,
+    ol,
+    dl,
+    table,
+    form,
+    fieldset,
+    details,
+    .bullet-list,
+    .callout,
+    span,
+    button
+  ):first-child {
+  padding-top: var(--s-5);
+}
+
+:where(
+  .dash-card,
+  .step-card,
+  .featured-card,
+  .value-card,
+  .pricing-card,
+  .indicator-simple-card,
+  .level-card,
+  .deliverable-card
+)
+  > :where(
+    h1,
+    h2,
+    h3,
+    h4,
+    p,
+    ul,
+    ol,
+    dl,
+    table,
+    form,
+    fieldset,
+    details,
+    .bullet-list,
+    .callout,
+    span,
+    button
+  ):last-child {
+  padding-bottom: var(--s-5);
+}
+
+/* Wrappers “padrão” (quando existirem) */
+.card-head {
+  padding: var(--s-5) var(--s-5) var(--s-4);
+  background: var(--color-surface-2);
+  border-bottom: 1px solid var(--dash-border-color, var(--color-line));
+}
+.card-head p {
+  margin: var(--s-2) 0 0;
+}
+
+.card-body {
+  padding: var(--s-5);
+}
+
+.card-foot {
+  padding: var(--s-4) var(--s-5);
+  border-top: 1px solid rgba(11, 18, 32, 0.06);
+}
+
+.inner {
+  padding: var(--s-5);
+}
+
+/* Home cards: body com padding consistente */
+.home-card-body {
+  padding: var(--s-5);
+}
+.home-card-body > :first-child {
+  margin-top: 0;
+}
+.home-card-body > :last-child {
+  margin-bottom: 0;
+}
+
+}

@@ -1,0 +1,780 @@
+/* NCS — landing.css (v10) */
+@layer pages {
+  /* ------------------------------------------------------------
+     Base (escopo landing)
+  ------------------------------------------------------------ */
+
+  #landing-view img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  #landing-view .hero-title-line { display: block; }
+
+  /* ------------------------------------------------------------
+     HERO (v10 — duas colunas + logo “grudada” no topo)
+     - HTML esperado: .hero-inner (grid) com .hero-content + .hero-mark
+     - A logo NÃO é mais watermark absoluto; ela vive na coluna direita
+  ------------------------------------------------------------ */
+
+  #landing-view .hero {
+    position: relative;
+    padding: calc(var(--header-h) + var(--s-9)) 0 var(--s-12);
+    background: var(--grad-hero);
+    overflow: hidden;
+  }
+
+  #landing-view .hero-inner {
+    width: var(--container-w);
+    margin-inline: auto;
+
+    position: relative;
+    z-index: 1;
+
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: var(--s-9);
+
+    /* alinha as duas colunas pelo topo */
+    align-items: start;
+  }
+
+  #landing-view .hero-content { min-width: 0; }
+
+  /* coluna direita: “cola” no topo do conteúdo */
+  #landing-view .hero-mark {
+    align-self: start;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    min-width: 0;
+  }
+
+  /* logo: grudada no topo da coluna direita */
+  #landing-view .hero-mark-logo {
+    display: block;
+    margin: 0;
+    width: clamp(220px, 28vw, 520px);
+    max-width: 100%;
+    height: auto;
+    opacity: 0.14;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  #landing-view .hero-inner > :only-child { grid-column: 1 / -1; }
+
+  #landing-view .hero-title {
+    margin: 0 0 var(--s-3);
+    font-size: clamp(2rem, 3.8vw, 3.1rem);
+    line-height: var(--lh-tight);
+    letter-spacing: -0.03em;
+  }
+
+  #landing-view .hero-subtitle {
+    margin: 0 0 var(--s-6);
+    font-size: var(--fs-3);
+    color: var(--color-text-2);
+    max-width: 70ch;
+  }
+
+  #landing-view .hero-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--s-6);
+    display: grid;
+    gap: var(--s-3);
+    max-width: 78ch;
+  }
+
+  #landing-view .hero-benefits > li {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 16px 1fr;
+    gap: var(--s-3);
+    align-items: start;
+    color: var(--color-text-2);
+    min-width: 0;
+  }
+
+  #landing-view .hero-benefits .benefit-label {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: var(--color-brand);
+    box-shadow: 0 0 0 4px var(--color-surface-2);
+    transform: translateY(0.38em);
+  }
+
+  #landing-view .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+  }
+
+  /* responsivo */
+  @media (max-width: 920px) {
+    #landing-view .hero-inner {
+      grid-template-columns: 1fr;
+      gap: var(--s-6);
+    }
+
+    /* logo vira bloco central abaixo/ao lado do conteúdo (topo da própria coluna) */
+    #landing-view .hero-mark {
+      justify-content: center;
+    }
+
+    #landing-view .hero-mark-logo {
+      width: clamp(200px, 60vw, 420px);
+      opacity: 0.12;
+    }
+  }
+}
+
+  /* ------------------------------------------------------------
+     Ritmo de seções + headings
+  ------------------------------------------------------------ */
+
+  #landing-view .ncs-section,
+  #landing-view .how-it-works,
+  #landing-view .featured-companies,
+  #landing-view .value-section,
+  #landing-view .indicators,
+  #landing-view .levels-section,
+  #landing-view .pricing-section,
+  #landing-view .architecture-section,
+  #landing-view .cta-section {
+    padding: var(--s-12) 0;
+  }
+
+  #landing-view .ncs-section { background: var(--color-surface); }
+  #landing-view .how-it-works { background: var(--color-bg); }
+  #landing-view .featured-companies { background: var(--color-surface); }
+  #landing-view .value-section { background: var(--color-bg); }
+  #landing-view .indicators { background: var(--color-surface); }
+  #landing-view .levels-section { background: var(--color-bg); }
+  #landing-view .pricing-section { background: var(--color-surface); }
+  #landing-view .architecture-section { background: var(--color-bg); }
+  #landing-view .cta-section { background: var(--color-surface); }
+
+  #landing-view section > h2 {
+    width: var(--container-w);
+    margin: 0 auto var(--s-6);
+  }
+
+  #landing-view .section-subtitle {
+    width: var(--container-w);
+    margin: var(--s-7) auto var(--s-3);
+    color: var(--color-muted);
+    font-size: var(--fs-1);
+  }
+
+  #landing-view h3.section-subtitle {
+    margin: var(--s-6) auto var(--s-3);
+    color: var(--color-text);
+    font-weight: var(--fw-semibold);
+  }
+
+  /* ------------------------------------------------------------
+     Figures “gráficos” (reutilizável: How-it-works, Resultado, etc.)
+     (este é o fix do “estourou”: antes estava escopado só em .how-it-works)
+  ------------------------------------------------------------ */
+
+  #landing-view .how-graphic {
+    width: var(--container-w);
+    margin: var(--s-6) auto 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  #landing-view .how-graphic-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 980px;
+    margin-inline: auto;
+
+    border-radius: var(--radius, 16px);
+    border: 1px solid var(--color-line);
+    box-shadow: var(--shadow-2);
+  }
+
+  /* ------------------------------------------------------------
+     Bullet list (container + override #impartiality)
+  ------------------------------------------------------------ */
+
+  #landing-view .bullet-list {
+    width: var(--container-w);
+    margin-inline: auto;
+  }
+
+  #landing-view #impartiality .bullet-list > li {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding-left: calc(var(--s-4) + 18px + var(--s-3));
+    background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-surface-2) 140%);
+  }
+
+  #landing-view #impartiality .bullet-list > li::before {
+    position: absolute;
+    left: var(--s-4);
+    top: calc(var(--s-4) + 0.42rem);
+    background: var(--color-accent);
+    box-shadow: 0 0 0 4px var(--color-surface);
+  }
+
+  /* ------------------------------------------------------------
+     Card pattern (Pricing-style) — usado em #pricing e #ncs
+  ------------------------------------------------------------ */
+
+  #landing-view .pricing-cards {
+    width: var(--container-w);
+    margin-inline: auto;
+    margin-top: var(--s-6);
+    display: flex;
+    justify-content: center;
+  }
+
+  #landing-view .pricing-card {
+    width: min(980px, 100%);
+    max-width: 100%;
+    padding: var(--s-7);
+
+    position: relative;
+    overflow: hidden;
+
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius, 16px);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-2);
+
+    display: grid;
+    gap: var(--s-4);
+  }
+
+  #landing-view .pricing-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--grad-card);
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  #landing-view .pricing-card > * {
+    position: relative;
+    min-width: 0;
+  }
+
+  #landing-view .pricing-card h3 {
+    margin: 0;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+
+  #landing-view .pricing-features {
+    list-style: none;
+    padding: 0;
+    margin: var(--s-3) 0 0;
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-3) var(--s-7);
+    align-items: start;
+  }
+
+  #landing-view .pricing-features > li {
+    margin: 0;
+    display: flex;
+    gap: var(--s-3);
+    align-items: flex-start;
+    color: var(--color-text-2);
+    min-width: 0;
+  }
+
+  #landing-view .pricing-features > li::before {
+    content: "";
+    flex: 0 0 10px;
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    background: var(--color-brand);
+    box-shadow: 0 0 0 3px var(--color-surface-2);
+    margin-top: 0.45em;
+  }
+
+  #landing-view .pricing-features > li > span {
+    display: block;
+    min-width: 0;
+  }
+
+  #landing-view .pricing-card .btn { margin-top: var(--s-4); }
+
+  @media (max-width: 860px) {
+    #landing-view .pricing-card { padding: var(--s-6); }
+    #landing-view .pricing-features { gap: var(--s-3) var(--s-6); }
+  }
+
+  @media (max-width: 720px) {
+    #landing-view .pricing-features { grid-template-columns: 1fr; }
+  }
+
+  /* ------------------------------------------------------------
+     NCS & ESG (detalhes do header e ações dentro do card)
+  ------------------------------------------------------------ */
+
+  #landing-view .ncs-section .ncs-card-title {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    margin: 0;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+
+  #landing-view .ncs-section .ncs-card-logo {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    flex: 0 0 auto;
+    border-radius: 6px;
+  }
+
+  #landing-view .ncs-section .ncs-card-actions {
+    margin-top: var(--s-4);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    align-items: center;
+  }
+
+  @media (max-width: 720px) {
+    #landing-view .ncs-section .ncs-card-actions > .btn { width: 100%; }
+  }
+
+  /* ------------------------------------------------------------
+     Steps
+  ------------------------------------------------------------ */
+
+  #landing-view .steps-container {
+    width: var(--container-w);
+    margin-inline: auto;
+
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--s-5);
+  }
+
+  @media (max-width: 1100px) {
+    #landing-view .steps-container { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 720px) {
+    #landing-view .steps-container { grid-template-columns: 1fr; }
+  }
+
+  #landing-view .step-card {
+    padding: var(--s-6);
+    position: relative;
+    overflow: hidden;
+  }
+
+  #landing-view .step-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--grad-card);
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  #landing-view .step-card > * { position: relative; }
+
+  #landing-view .step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--r-pill);
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-line);
+    font-weight: var(--fw-bold);
+    color: var(--color-accent);
+  }
+
+  #landing-view .step-card h3 { margin: var(--s-3) 0 var(--s-2); }
+
+  /* ------------------------------------------------------------
+     Featured grid (Entregas)
+  ------------------------------------------------------------ */
+
+  #landing-view .featured-grid {
+    width: var(--container-w);
+    margin-inline: auto;
+    margin-top: var(--s-7);
+
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s-4);
+  }
+
+  @media (max-width: 1000px) {
+    #landing-view .featured-grid { grid-template-columns: 1fr; }
+  }
+
+  #landing-view .featured-note { margin: var(--s-2) 0 0; }
+
+  #landing-view .featured-card.level-avancado {
+    border-left: 4px solid var(--color-success);
+    padding-left: calc(var(--s-5) - 4px);
+  }
+
+  #landing-view .featured-card.level-conformidade {
+    border-left: 4px solid var(--color-warning);
+    padding-left: calc(var(--s-5) - 4px);
+  }
+
+  #landing-view .featured-card.level-excelencia {
+    border-left: 4px solid var(--color-accent);
+    padding-left: calc(var(--s-5) - 4px);
+  }
+
+  /* ------------------------------------------------------------
+     Value cards
+  ------------------------------------------------------------ */
+
+  #landing-view .value-cards {
+    width: var(--container-w);
+    margin-inline: auto;
+    margin-top: var(--s-7);
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--s-4);
+  }
+
+  @media (max-width: 720px) {
+    #landing-view .value-cards { grid-template-columns: 1fr; }
+  }
+
+  #landing-view .value-cards.cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: 720px) {
+    #landing-view .value-cards.cols-2 { grid-template-columns: 1fr; }
+  }
+
+  #landing-view .value-card {
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-2);
+    align-content: start;
+  }
+
+  #landing-view .value-card h3 { margin: 0; }
+  #landing-view .value-card p { margin: 0; color: var(--color-text-2); }
+
+  #landing-view .value-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--r-pill);
+    display: grid;
+    place-items: center;
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-line);
+    color: var(--color-text);
+  }
+
+  /* ------------------------------------------------------------
+     Indicadores (cards com listas)
+  ------------------------------------------------------------ */
+
+  #landing-view .indicator-simple-grid {
+    width: var(--container-w);
+    margin-inline: auto;
+  }
+
+  #landing-view .indicator-simple-card {
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-2);
+    align-content: start;
+  }
+
+  #landing-view .indicator-simple-card h3,
+  #landing-view .indicator-simple-card p {
+    margin: 0;
+  }
+
+  #landing-view .indicator-simple-card p { color: var(--color-text-2); }
+
+  #landing-view .indicator-simple-card > ul:not(.bullet-list) {
+    margin: var(--s-3) 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: var(--s-2);
+  }
+
+  #landing-view .indicator-simple-card ul { margin-bottom: 0; }
+
+  /* ------------------------------------------------------------
+     Levels grid (se ainda existir em outras versões)
+  ------------------------------------------------------------ */
+
+  #landing-view .levels-grid,
+  #landing-view .level-grid {
+    width: var(--container-w);
+    margin-inline: auto;
+
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--s-4);
+  }
+
+  @media (max-width: 1100px) {
+    #landing-view .levels-grid,
+    #landing-view .level-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 720px) {
+    #landing-view .levels-grid,
+    #landing-view .level-grid { grid-template-columns: 1fr; }
+  }
+
+  #landing-view .level-card {
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-2);
+    align-content: start;
+  }
+
+  #landing-view .level-card h3 { margin: 0; }
+  #landing-view .level-range { margin: 0; color: var(--color-muted); font-size: var(--fs-0); }
+  #landing-view .level-desc { margin: var(--s-2) 0 0; color: var(--color-text-2); }
+
+  /* ------------------------------------------------------------
+     Pricing (apenas tipografia de preço)
+  ------------------------------------------------------------ */
+
+  #landing-view #pricing.pricing-section { padding-block: var(--s-9); }
+
+  #landing-view #pricing .price {
+    margin: 0;
+    font-weight: var(--fw-bold);
+    color: var(--color-text);
+  }
+
+  #landing-view #pricing .price-sub {
+    display: inline-block;
+    font-weight: var(--fw-medium);
+    color: var(--color-muted);
+    font-size: var(--fs-0);
+  }
+
+  /* ------------------------------------------------------------
+     CTA
+  ------------------------------------------------------------ */
+
+  #landing-view .cta-section {
+    border-top: 1px solid var(--color-line);
+    background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-2) 100%);
+    text-align: center;
+  }
+
+  #landing-view .cta-section > h2 { margin-bottom: var(--s-3); }
+
+  #landing-view .cta-subtitle {
+    width: var(--container-w);
+    margin: 0 auto var(--s-6);
+    max-width: 78ch;
+    color: var(--color-text-2);
+  }
+
+  #landing-view .cta-actions {
+    width: var(--container-w);
+    margin-inline: auto;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ------------------------------------------------------------
+     Cartão do Selo (Como ler)
+  ------------------------------------------------------------ */
+
+  #landing-view .seal-card-inner {
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-2);
+  }
+
+  #landing-view .seal-card-inner .h3-tight { margin: 0; }
+
+  #landing-view .featured-level {
+    display: block;
+    color: var(--color-muted);
+    font-size: var(--fs-0);
+  }
+
+  #landing-view .seal-readme {
+    margin-top: var(--s-3);
+    display: grid;
+    gap: var(--s-2);
+  }
+
+  #landing-view .seal-readme > div {
+    display: grid;
+    grid-template-columns: minmax(140px, 180px) 1fr;
+    gap: var(--s-3);
+    align-items: baseline;
+    color: var(--color-text-2);
+  }
+
+  #landing-view .seal-readme .text-strong {
+    display: block;
+    color: var(--color-text);
+    font-weight: var(--fw-semibold);
+  }
+
+  @media (max-width: 720px) {
+    #landing-view .seal-readme > div {
+      grid-template-columns: 1fr;
+      gap: var(--s-1);
+    }
+  }
+
+  /* ------------------------------------------------------------
+     Deliverables (#deliverables)
+  ------------------------------------------------------------ */
+
+  #landing-view #deliverables .featured-card {
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-3);
+    align-content: start;
+  }
+
+  #landing-view #deliverables .featured-card.level-avancado,
+  #landing-view #deliverables .featured-card.level-conformidade,
+  #landing-view #deliverables .featured-card.level-excelencia {
+    padding-left: calc(var(--s-6) - 4px);
+  }
+
+  #landing-view #deliverables .featured-head {
+    display: flex;
+    gap: var(--s-3);
+    align-items: flex-start;
+  }
+
+  #landing-view #deliverables .featured-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--r-pill);
+    display: grid;
+    place-items: center;
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-line);
+    color: var(--color-text);
+    flex: 0 0 auto;
+  }
+
+  #landing-view #deliverables .featured-head h3 { margin: 0; }
+  #landing-view #deliverables .featured-level { margin-top: 2px; }
+
+  #landing-view #deliverables .featured-note {
+    margin: 0;
+    color: var(--color-text-2);
+    max-width: 72ch;
+  }
+
+  #landing-view #deliverables .featured-specs {
+    margin: var(--s-2) 0 0;
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--color-line);
+    display: grid;
+    gap: var(--s-2);
+  }
+
+  #landing-view #deliverables .featured-specs .spec {
+    display: grid;
+    grid-template-columns: minmax(96px, 120px) 1fr;
+    gap: var(--s-3);
+    align-items: baseline;
+  }
+
+  #landing-view #deliverables .featured-specs dt {
+    margin: 0;
+    font-weight: var(--fw-semibold);
+    color: var(--color-text);
+    font-size: var(--fs-0);
+  }
+
+  #landing-view #deliverables .featured-specs dd {
+    margin: 0;
+    color: var(--color-text-2);
+    font-size: var(--fs-0);
+  }
+
+  @media (max-width: 720px) {
+    #landing-view #deliverables .featured-specs .spec {
+      grid-template-columns: 1fr;
+      gap: var(--s-1);
+    }
+  }
+
+  /* ------------------------------------------------------------
+     Value proposition (#value-proposition)
+  ------------------------------------------------------------ */
+
+  #landing-view #value-proposition .value-cards {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  @media (max-width: 1100px) {
+    #landing-view #value-proposition .value-cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 720px) {
+    #landing-view #value-proposition .value-cards { grid-template-columns: 1fr; }
+  }
+
+  #landing-view #value-proposition .value-card p { max-width: 60ch; }
+
+  #landing-view #value-proposition .value-result {
+    margin-top: var(--s-4);
+    padding-top: var(--s-3);
+    border-top: 1px solid var(--color-line);
+
+    display: grid;
+    grid-template-columns: minmax(96px, 120px) 1fr;
+    gap: var(--s-3);
+    align-items: baseline;
+  }
+
+  #landing-view #value-proposition .value-result-label {
+    font-weight: var(--fw-semibold);
+    color: var(--color-text);
+    font-size: var(--fs-0);
+  }
+
+  #landing-view #value-proposition .value-result-text {
+    color: var(--color-text-2);
+    font-size: var(--fs-0);
+  }
+
+  @media (max-width: 720px) {
+    #landing-view #value-proposition .value-result {
+      grid-template-columns: 1fr;
+      gap: var(--s-1);
+    }
+  }
+}

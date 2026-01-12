@@ -1,0 +1,924 @@
+<!-- ======================================================================
+  auditor-dashboard.html — Painel do Avaliador (parcial para include)
+  Objetivo: HTML estável, IDs/data-actions preservados e pronto p/ integração.
+
+  Higiene (jan/2026):
+  - Mantém HOME opcional (hidden), mas reduz redundâncias no topo.
+  - Topbar simplificada (sem SLA verboso em UI; elemento permanece no DOM p/ JS).
+  - Etapas do processo alinhadas ao Regulamento (admissibilidade → avaliação → complementação → decisão NCS → comunicação/recursos).
+  - Mantém filtros, wrappers e IDs críticos para JS.
+  - “Publicação” segue deprecado (mantido hidden p/ compatibilidade).
+====================================================================== -->
+
+<div id="auditor-dashboard-view" class="view" data-view="auditor-dashboard">
+  <div class="auditor-dashboard-shell auditor-dashboard-container" data-shell="auditor">
+    <!-- Leitor de tela: avisos de fila/decisões/status -->
+    <div id="auditor-dashboard-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- =========================================================
+      HOME OPERACIONAL (opcional)
+      Obs.: Mantido por compatibilidade; pode ser exibido por JS.
+    ========================================================== -->
+    <section
+      id="auditor-dashboard-home"
+      class="auditor-dashboard-home"
+      aria-label="Central operacional"
+      data-ui="auditor-home"
+      hidden
+    >
+      <div class="home-cards-grid">
+        <!-- Card único: Indicadores resumidos e triagem -->
+        <article class="dash-card home-card home-kpis" aria-label="Indicadores rápidos da fila" data-ux="kpis-card">
+          <header class="card-head">
+            <h2 class="h2-tight">Indicadores</h2>
+          </header>
+
+          <div id="auditor-queue-kpis-home" class="kpi-grid" aria-label="KPIs resumidos" aria-live="polite"></div>
+
+          <div class="home-card-body">
+            <button class="btn btn-secondary btn-small" type="button" data-action="auditor-home" data-go="triage">
+              Triagem rápida
+            </button>
+            <button class="btn btn-secondary btn-small" type="button" data-action="auditor-home" data-go="overdue">
+              Ver atrasados
+            </button>
+            <button class="btn btn-link btn-small" type="button" data-action="open-modal" data-modal="impartiality-policy">
+              Política de imparcialidade
+            </button>
+            <button class="btn btn-link btn-small" type="button" data-action="open-modal" data-modal="appeals">
+              Política de recursos
+            </button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- =========================================================
+      SHELL COMPLETO DO AVALIADOR
+      Wrappers importantes para o JS:
+      - #auditor-top-panels
+      - #auditor-queue-region
+      - #auditor-process-detail
+    ========================================================== -->
+    <div
+      id="auditor-full-dashboard"
+      data-ui="auditor-dashboard"
+      role="main"
+      aria-label="Painel completo do avaliador"
+    >
+      <!-- TOPO OPERACIONAL (pode ser ocultado no modo detalhe) -->
+      <div id="auditor-top-panels" data-ui="auditor-top-panels">
+        <header class="dash-topbar auditor-dash-header" aria-label="Cabeçalho do avaliador" data-ux="topbar">
+          <div class="dash-topbar-left">
+            <h1 class="dash-title">Painel do avaliador</h1>
+
+            <p class="muted mt-1 mb-0">
+              <span class="meta-chip">
+                Em foco: <span id="auditor-focus-label" aria-live="polite">Fila</span>
+              </span>
+
+              <!-- Mantém o elemento para JS/telemetria, mas sem poluir a UI -->
+              <span class="sr-only">
+                Prazo: <span id="auditor-sla-summary" aria-live="polite">—</span>
+              </span>
+            </p>
+          </div>
+
+          <div class="dash-topbar-right" aria-label="Ações do avaliador">
+            <div class="btn-cluster">
+              <button class="btn btn-secondary btn-small" type="button" data-action="auditor-refresh-queue">
+                Atualizar fila
+              </button>
+            </div>
+
+            <div class="dash-utility">
+              <button class="btn btn-link btn-small" type="button" data-action="open-modal" data-modal="impartiality-policy">
+                Imparcialidade
+              </button>
+              <button class="btn btn-link btn-small" type="button" data-action="open-modal" data-modal="appeals">
+                Recursos
+              </button>
+            </div>
+            <!-- tours descontinuados -->
+          </div>
+        </header>
+
+        <!-- =========================================================
+          HERO (Visão rápida do processo)
+          Mantido por consistência visual, mas com copy enxuta e aderente
+          ao papel do avaliador (análise técnica + recomendação).
+        ========================================================== -->
+        <section class="dash-hero auditor-hero" aria-label="Visão rápida do processo" data-ux="hero">
+          <div class="dash-hero-grid">
+            <article class="dash-card hero-card" aria-label="Visão rápida">
+              <header class="card-head">
+                <h2 class="h2-tight">Visão rápida</h2>
+              </header>
+
+              <div class="client-overview-grid">
+                <!-- Etapas do processo (referência) -->
+                <div class="dash-card inner">
+                  <h3 class="h3-tight">Etapas (referência)</h3>
+                  <ol class="client-timeline" id="auditor-timeline" aria-label="Etapas do processo" aria-live="polite">
+                    <li class="timeline-step">Submissão</li>
+                    <li class="timeline-step">Admissibilidade</li>
+                    <li class="timeline-step">Avaliação técnica</li>
+                    <li class="timeline-step">Complementação</li>
+                    <li class="timeline-step">Decisão NCS</li>
+                    <li class="timeline-step">Comunicação / Recursos</li>
+                  </ol>
+                </div>
+
+                <!-- Relatórios e recursos (consulta/rascunhos) -->
+                <div class="dash-card inner">
+                  <h3 class="h3-tight">Relatórios &amp; Recursos</h3>
+
+                  <div class="deliverables-grid" aria-label="Relatórios e recursos">
+                    <div class="deliverable-card">
+                      <h4>Relatório técnico</h4>
+                      <div class="deliverable-meta">
+                        <span class="meta-chip">
+                          Rascunhos: <span id="auditor-reports-count-parecer" aria-live="polite">—</span>
+                        </span>
+                        <span class="sr-only">
+                          Atualizado em: <span id="auditor-reports-last-parecer" aria-live="polite">—</span>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="deliverable-card">
+                      <h4>Sumário executivo</h4>
+                      <div class="deliverable-meta">
+                        <span class="meta-chip">
+                          Rascunhos: <span id="auditor-reports-count-sumario" aria-live="polite">—</span>
+                        </span>
+                        <span class="sr-only">
+                          Atualizado em: <span id="auditor-reports-last-sumario" aria-live="polite">—</span>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="deliverable-card">
+                      <h4>Recursos</h4>
+                      <div class="deliverable-meta">
+                        <span class="meta-chip">
+                          Pedidos: <span id="auditor-resources-count" aria-live="polite">—</span>
+                        </span>
+                        <span class="sr-only">
+                          Atualizado em: <span id="auditor-resources-last" aria-live="polite">—</span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+
+      <!-- =========================================================
+        PRINCIPAL: FILA + DETALHE
+      ========================================================== -->
+      <div class="auditor-dashboard-grid">
+        <!-- FILA (pode ser ocultada no modo detalhe) -->
+        <!-- Fila fica oculta por padrão no modo workspace para evitar necessidade de processo "fake" -->
+        <section id="auditor-queue-region" data-ui="auditor-queue-region" hidden>
+          <section id="auditor-queue" class="dash-card queue-section" aria-label="Fila de processos" data-ui="auditor-queue">
+            <header class="card-head">
+              <h2 class="h2-tight">Fila de processos</h2>
+            </header>
+
+            <!-- Ações de triagem -->
+            <div class="actions-row mt-2">
+              <button class="btn btn-secondary btn-small" type="button" data-action="auditor-clear-filters">
+                Limpar filtros
+              </button>
+              <button class="btn btn-secondary btn-small" type="button" data-action="auditor-triage" data-mode="sla">
+                Triar por prazo
+              </button>
+              <button class="btn btn-secondary btn-small" type="button" data-action="auditor-triage" data-mode="overdue">
+                Ver atrasados
+              </button>
+              <button class="btn btn-secondary btn-small" type="button" data-action="auditor-triage" data-mode="attention">
+                Ver atenção
+              </button>
+            </div>
+
+            <div class="queue-filters" aria-label="Filtros" data-ux="queue-filters">
+              <div class="form-group">
+                <label for="auditor-filter-status">Status</label>
+                <select id="auditor-filter-status" name="filter_status" data-action="auditor-filter" data-filter="status">
+                  <option value="">Todos</option>
+                  <option value="Submetido">Submetido</option>
+                  <option value="Em análise">Em análise</option>
+                  <option value="Devolvido p/ ajustes">Pendente de complemento</option>
+                  <option value="Em validação">Em validação</option>
+                  <option value="Validado">Validado</option>
+                  <option value="Encerrado">Encerrado</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="auditor-filter-sla">Prazo</label>
+                <select id="auditor-filter-sla" name="filter_sla" data-action="auditor-filter" data-filter="sla">
+                  <option value="">Todos</option>
+                  <option value="emdia">Em dia</option>
+                  <option value="atencao">Atenção</option>
+                  <option value="atrasado">Atrasado</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="auditor-filter-city">Município</label>
+                <input
+                  id="auditor-filter-city"
+                  name="filter_city"
+                  type="text"
+                  placeholder="Ex.: Londrina"
+                  autocomplete="off"
+                  data-action="auditor-filter"
+                  data-filter="city"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="auditor-filter-sector">Setor</label>
+                <input
+                  id="auditor-filter-sector"
+                  name="filter_sector"
+                  type="text"
+                  placeholder="Ex.: Comércio"
+                  autocomplete="off"
+                  data-action="auditor-filter"
+                  data-filter="sector"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="auditor-filter-search">Busca</label>
+                <input
+                  id="auditor-filter-search"
+                  name="filter_search"
+                  type="text"
+                  placeholder="Razão social, ID, CNPJ…"
+                  autocomplete="off"
+                  data-action="auditor-filter"
+                  data-filter="search"
+                />
+              </div>
+
+              <div class="form-actions align-end">
+                <button class="btn btn-secondary btn-small" type="button" data-action="auditor-clear-filters">Limpar</button>
+              </div>
+            </div>
+
+            <div
+              id="auditor-process-list"
+              class="process-list"
+              aria-label="Lista de processos"
+              role="list"
+              data-empty="queue"
+            >
+              <p class="empty-state">Nenhum processo designado no momento. Ajuste os filtros ou aguarde novas designações.</p>
+            </div>
+          </section>
+        </section>
+
+        <!-- DETALHE (oculto até seleção) -->
+        <section
+          id="auditor-process-detail"
+          class="dash-card detail-section"
+          aria-label="Detalhes do processo"
+          data-ui="auditor-detail"
+          hidden
+        >
+          <div class="detail-header" data-ux="detail-header">
+            <button class="btn btn-secondary btn-small" type="button" data-action="auditor-back">Voltar</button>
+
+            <div class="detail-title">
+              <h2 id="auditor-process-name" class="h2-tight" data-bind="processName">Processo</h2>
+              <p class="muted mt-1 mb-0">
+                <span class="meta-chip">ID: <span id="auditor-process-id" aria-live="polite" data-bind="processId">—</span></span>
+                <span class="meta-chip">Situação: <span id="auditor-process-status" aria-live="polite" data-bind="processStatus">—</span></span>
+                <span class="meta-chip">Fase: <span id="auditor-process-stage" aria-live="polite" data-bind="processStage">—</span></span>
+                <span class="meta-chip">Prazo: <span id="auditor-process-sla" aria-live="polite" data-bind="processSla">—</span></span>
+                <span class="meta-chip">Evidências: <span id="auditor-process-evidence-count" aria-live="polite" data-bind="processEvidenceCount">—</span></span>
+              </p>
+            </div>
+
+            <div class="detail-quick-actions" aria-label="Ações rápidas">
+              <button class="btn btn-secondary btn-small" type="button" data-action="auditor-assume">Assumir</button>
+              <button class="btn btn-secondary btn-small" type="button" data-action="auditor-devolver">Devolver</button>
+              <button class="btn btn-primary btn-small" type="button" data-action="auditor-finalizar">Enviar recomendação</button>
+            </div>
+          </div>
+
+          <!-- Placeholder para workspace vazio: mantido para troca de estado pelo JS; sem instruções textuais -->
+          <div id="auditor-workspace-callout" hidden></div>
+
+          <!-- Process switcher: permite carregar processos sem depender da fila -->
+          <div class="process-switcher mt-3" aria-label="Selecionar processo">
+            <label for="auditor-process-switcher-id" class="sr-only">ID do processo</label>
+            <input
+              id="auditor-process-switcher-id"
+              type="text"
+              class="input-small"
+              placeholder="Digite o ID do processo…"
+            />
+            <button class="btn btn-secondary btn-small ml-1" type="button" data-action="auditor-load-by-id">
+              Carregar
+            </button>
+            <button class="btn btn-secondary btn-small ml-1" type="button" data-action="auditor-load-last">
+              Último
+            </button>
+          </div>
+
+          <!-- Navegação por abas (detalhe) -->
+          <nav class="auditor-subnav" aria-label="Seções do processo" role="tablist" data-ux="detail-subnav">
+            <button
+              class="subnav-btn active"
+              type="button"
+              role="tab"
+              id="auditor-tab-summary"
+              aria-selected="true"
+              aria-controls="auditor-panel-summary"
+              tabindex="0"
+              data-action="auditor-switch-detail"
+              data-section="summary"
+            >
+              Resumo
+            </button>
+
+            <button
+              class="subnav-btn"
+              type="button"
+              role="tab"
+              id="auditor-tab-evidence"
+              aria-selected="false"
+              aria-controls="auditor-panel-evidence"
+              tabindex="-1"
+              data-action="auditor-switch-detail"
+              data-section="evidence"
+            >
+              Evidências (E/S/G)
+            </button>
+
+            <button
+              class="subnav-btn"
+              type="button"
+              role="tab"
+              id="auditor-tab-indicators"
+              aria-selected="false"
+              aria-controls="auditor-panel-indicators"
+              tabindex="-1"
+              data-action="auditor-switch-detail"
+              data-section="indicators"
+            >
+              Indicadores
+            </button>
+
+            <button
+              class="subnav-btn"
+              type="button"
+              role="tab"
+              id="auditor-tab-feedback"
+              aria-selected="false"
+              aria-controls="auditor-panel-feedback"
+              tabindex="-1"
+              data-action="auditor-switch-detail"
+              data-section="feedback"
+            >
+              Parecer / Recomendações
+            </button>
+
+            <button
+              class="subnav-btn"
+              type="button"
+              role="tab"
+              id="auditor-tab-status"
+              aria-selected="false"
+              aria-controls="auditor-panel-status"
+              tabindex="-1"
+              data-action="auditor-switch-detail"
+              data-section="status"
+            >
+              Status
+            </button>
+
+            <button
+              class="subnav-btn"
+              type="button"
+              role="tab"
+              id="auditor-tab-deliverables"
+              aria-selected="false"
+              aria-controls="auditor-panel-deliverables"
+              tabindex="-1"
+              data-action="auditor-switch-detail"
+              data-section="deliverables"
+            >
+              Relatórios
+            </button>
+
+            <!-- Publicação (DEPRECADO) — mantido hidden para não quebrar JS legado -->
+            <button
+              class="subnav-btn"
+              type="button"
+              role="tab"
+              id="auditor-tab-publish"
+              aria-selected="false"
+              aria-controls="auditor-panel-publish"
+              tabindex="-1"
+              data-action="auditor-switch-detail"
+              data-section="publish"
+              hidden
+              aria-hidden="true"
+              data-deprecated="1"
+            >
+              Publicação
+            </button>
+
+            <button
+              class="subnav-btn"
+              type="button"
+              role="tab"
+              id="auditor-tab-audit"
+              aria-selected="false"
+              aria-controls="auditor-panel-audit"
+              tabindex="-1"
+              data-action="auditor-switch-detail"
+              data-section="audit"
+            >
+              Trilha
+            </button>
+
+            <button
+              class="subnav-btn"
+              type="button"
+              role="tab"
+              id="auditor-tab-appeals"
+              aria-selected="false"
+              aria-controls="auditor-panel-appeals"
+              tabindex="-1"
+              data-action="auditor-switch-detail"
+              data-section="appeals"
+            >
+              Recursos
+            </button>
+
+            <button
+              class="subnav-btn"
+              type="button"
+              role="tab"
+              id="auditor-tab-impartiality"
+              aria-selected="false"
+              aria-controls="auditor-panel-impartiality"
+              tabindex="-1"
+              data-action="auditor-switch-detail"
+              data-section="impartiality"
+            >
+              Imparcialidade
+            </button>
+          </nav>
+
+          <!-- Conteúdo do detalhe -->
+          <div class="detail-grid" data-ux="detail-grid">
+            <!-- RESUMO -->
+            <section
+              id="auditor-panel-summary"
+              class="dash-card inner auditor-panel active"
+              role="tabpanel"
+              tabindex="0"
+              aria-labelledby="auditor-tab-summary"
+              aria-label="Perfil e questionário ESG"
+              data-panel="summary"
+            >
+              <h3 class="h3-tight">Perfil da organização &amp; Questionário ESG</h3>
+
+              <!-- Seção de perfil -->
+              <section class="auditor-profile-section">
+                <h4 class="h4-tight">Perfil da organização (submetido pelo participante)</h4>
+                <dl class="profile-info">
+                  <div class="profile-row">
+                    <dt>Razão social</dt>
+                    <dd><span id="auditor-profile-legalName">—</span></dd>
+                  </div>
+                  <div class="profile-row">
+                    <dt>CNPJ</dt>
+                    <dd><span id="auditor-profile-cnpj">—</span></dd>
+                  </div>
+                  <div class="profile-row">
+                    <dt>CNAEs</dt>
+                    <dd><span id="auditor-profile-cnaes">—</span></dd>
+                  </div>
+                  <div class="profile-row">
+                    <dt>Município/UF</dt>
+                    <dd><span id="auditor-profile-city">—</span></dd>
+                  </div>
+                  <div class="profile-row">
+                    <dt>Setor</dt>
+                    <dd><span id="auditor-profile-sector">—</span></dd>
+                  </div>
+                  <div class="profile-row">
+                    <dt>Site</dt>
+                    <dd><span id="auditor-profile-site">—</span></dd>
+                  </div>
+                  <div class="profile-row">
+                    <dt>Missão</dt>
+                    <dd><span id="auditor-profile-mission">—</span></dd>
+                  </div>
+                  <div class="profile-row">
+                    <dt>Visão</dt>
+                    <dd><span id="auditor-profile-vision">—</span></dd>
+                  </div>
+                  <div class="profile-row">
+                    <dt>Valores</dt>
+                    <dd><span id="auditor-profile-values">—</span></dd>
+                  </div>
+                  <div class="profile-row">
+                    <dt>Declarações/aceites</dt>
+                    <dd><span id="auditor-profile-declarations">—</span></dd>
+                  </div>
+                </dl>
+              </section>
+
+              <!-- Seção de questionário ESG -->
+              <section class="auditor-questionnaire-section mt-3">
+                <h4 class="h4-tight">Questionário ESG (onboarding)</h4>
+                <p id="auditor-profile-empty" class="empty-state" hidden>Perfil ainda não submetido pelo participante para este ciclo.</p>
+                <div id="auditor-profile-answers" class="profile-answers"></div>
+              </section>
+
+              <!-- Eventos críticos permanecem para compatibilidade -->
+              <div id="auditor-critical-events" class="critical-events mt-3" data-empty="critical-events"></div>
+            </section>
+
+            <!-- IMPARCIALIDADE -->
+            <section
+              id="auditor-panel-impartiality"
+              class="dash-card inner auditor-panel"
+              role="tabpanel"
+              tabindex="0"
+              aria-labelledby="auditor-tab-impartiality"
+              aria-label="Imparcialidade e conflito"
+              data-panel="impartiality"
+              hidden
+            >
+              <h3 class="h3-tight">Imparcialidade &amp; conflito</h3>
+
+              <label class="checkbox-line">
+                <input id="auditor-no-conflict" name="no_conflict" type="checkbox" />
+                Declaração de inexistência de conflito de interesses neste processo.
+              </label>
+
+              <div class="form-group mt-2">
+                <label for="auditor-conflict-note">Registro de impedimento (se houver)</label>
+                <textarea
+                  id="auditor-conflict-note"
+                  name="conflict_note"
+                  rows="3"
+                  placeholder="Descreva o conflito e o encaminhamento…"
+                ></textarea>
+              </div>
+
+              <div class="actions-row">
+                <button class="btn btn-secondary btn-small" type="button" data-action="auditor-save-impartiality">
+                  Salvar registro
+                </button>
+              </div>
+            </section>
+
+            <!-- EVIDÊNCIAS -->
+            <section
+              id="auditor-panel-evidence"
+              class="dash-card inner auditor-panel span-all"
+              role="tabpanel"
+              tabindex="0"
+              aria-labelledby="auditor-tab-evidence"
+              aria-label="Repositório de evidências"
+              data-panel="evidence"
+              hidden
+            >
+              <h3 class="h3-tight">Repositório de evidências (E/S/G)</h3>
+
+              <div class="evidence-toolbar" aria-label="Ferramentas de evidência" data-ux="evidence-tools">
+                <button
+                  class="btn btn-secondary btn-small"
+                  type="button"
+                  data-action="auditor-ai"
+                  data-ai="suggest-evidence-mapping"
+                  disabled
+                  aria-disabled="true"
+                  title="Disponível no piloto"
+                >
+                  Sugerir vínculo (IA)
+                </button>
+
+                <button
+                  class="btn btn-secondary btn-small"
+                  type="button"
+                  data-action="auditor-ai"
+                  data-ai="detect-evidence-issues"
+                  disabled
+                  aria-disabled="true"
+                  title="Disponível no piloto"
+                >
+                  Detectar problemas (IA)
+                </button>
+              </div>
+
+              <div class="auditor-evidence-grid">
+                <div class="auditor-evidence-pillar" data-pillar="E">
+                  <h4>Ambiental (E)</h4>
+                  <div id="auditor-evidence-list-E" class="evidence-list" data-empty="evidence-E" role="list"></div>
+                </div>
+
+                <div class="auditor-evidence-pillar" data-pillar="S">
+                  <h4>Social (S)</h4>
+                  <div id="auditor-evidence-list-S" class="evidence-list" data-empty="evidence-S" role="list"></div>
+                </div>
+
+                <div class="auditor-evidence-pillar" data-pillar="G">
+                  <h4>Governança (G)</h4>
+                  <div id="auditor-evidence-list-G" class="evidence-list" data-empty="evidence-G" role="list"></div>
+                </div>
+              </div>
+            </section>
+
+            <!-- INDICADORES -->
+            <section
+              id="auditor-panel-indicators"
+              class="dash-card inner auditor-panel span-all"
+              role="tabpanel"
+              tabindex="0"
+              aria-labelledby="auditor-tab-indicators"
+              aria-label="Avaliação por indicador"
+              data-panel="indicators"
+              hidden
+            >
+              <h3 class="h3-tight">Avaliação por indicador</h3>
+              <div id="auditor-indicators-grid" class="table-wrap" data-empty="indicators"></div>
+            </section>
+
+            <!-- FEEDBACK -->
+            <section
+              id="auditor-panel-feedback"
+              class="dash-card inner auditor-panel span-all"
+              role="tabpanel"
+              tabindex="0"
+              aria-labelledby="auditor-tab-feedback"
+              aria-label="Parecer e recomendações"
+              data-panel="feedback"
+              hidden
+            >
+              <h3 class="h3-tight">Parecer &amp; Recomendações</h3>
+              <textarea
+                id="auditor-general-feedback"
+                name="general_feedback"
+                rows="4"
+                placeholder="Síntese do ciclo, principais achados e pontos críticos…"
+              ></textarea>
+
+              <h3 class="h3-tight mt-3">Recomendações</h3>
+              <textarea
+                id="auditor-recommendations"
+                name="recommendations"
+                rows="4"
+                placeholder="Recomendações objetivas (por pilar/indicador), priorização e próximos passos…"
+              ></textarea>
+
+              <div class="actions-row mt-3">
+                <button
+                  class="btn btn-secondary btn-small"
+                  type="button"
+                  data-action="auditor-ai"
+                  data-ai="draft-feedback"
+                  disabled
+                  aria-disabled="true"
+                  title="Disponível no piloto"
+                >
+                  Rascunho (IA)
+                </button>
+
+                <button class="btn btn-primary btn-small" type="button" data-action="auditor-save-feedback">
+                  Salvar feedback
+                </button>
+              </div>
+            </section>
+
+            <!-- ENTREGÁVEIS -->
+            <section
+              id="auditor-panel-deliverables"
+              class="dash-card inner auditor-panel"
+              role="tabpanel"
+              tabindex="0"
+              aria-labelledby="auditor-tab-deliverables"
+              aria-label="Relatórios e versões"
+              data-panel="deliverables"
+              hidden
+            >
+              <h3 class="h3-tight">Relatórios</h3>
+
+              <div class="report-nav actions-row">
+                <button class="btn btn-secondary btn-small report-nav-btn active" type="button" data-action="auditor-open-report" data-type="sumario">
+                  Sumário executivo
+                </button>
+                <button class="btn btn-secondary btn-small report-nav-btn" type="button" data-action="auditor-open-report" data-type="parecer">
+                  Relatório técnico
+                </button>
+                <button class="btn btn-secondary btn-small report-nav-btn" type="button" data-action="auditor-open-report" data-type="dossie">
+                  Dossiê
+                </button>
+              </div>
+
+              <div id="auditor-report-editors" class="mt-3">
+                <div class="report-editor-section" data-report-type="sumario" hidden>
+                  <div class="form-group">
+                    <label for="auditor-report-sumario-content">Conteúdo do sumário executivo</label>
+                    <textarea id="auditor-report-sumario-content" rows="6" placeholder="Digite o sumário executivo…"></textarea>
+                  </div>
+                  <div class="actions-row mt-2">
+                    <button class="btn btn-primary btn-small" type="button" data-action="auditor-report-save" data-type="sumario">Salvar rascunho</button>
+                    <button class="btn btn-secondary btn-small" type="button" data-action="auditor-report-ai" data-type="sumario">Gerar rascunho (IA)</button>
+                    <button class="btn btn-secondary btn-small" type="button" data-action="auditor-report-preview" data-type="sumario">Atualizar preview</button>
+                  </div>
+                  <div id="auditor-report-preview-sumario" class="report-preview mt-2"></div>
+                </div>
+
+                <div class="report-editor-section" data-report-type="parecer" hidden>
+                  <div class="form-group">
+                    <label for="auditor-report-parecer-content">Conteúdo do relatório técnico</label>
+                    <textarea id="auditor-report-parecer-content" rows="6" placeholder="Digite o relatório técnico…"></textarea>
+                  </div>
+                  <div class="actions-row mt-2">
+                    <button class="btn btn-primary btn-small" type="button" data-action="auditor-report-save" data-type="parecer">Salvar rascunho</button>
+                    <button class="btn btn-secondary btn-small" type="button" data-action="auditor-report-ai" data-type="parecer">Gerar rascunho (IA)</button>
+                    <button class="btn btn-secondary btn-small" type="button" data-action="auditor-report-preview" data-type="parecer">Atualizar preview</button>
+                  </div>
+                  <div id="auditor-report-preview-parecer" class="report-preview mt-2"></div>
+                </div>
+
+                <div class="report-editor-section" data-report-type="dossie" hidden>
+                  <div class="form-group">
+                    <label for="auditor-report-dossie-content">Conteúdo do dossiê</label>
+                    <textarea id="auditor-report-dossie-content" rows="6" placeholder="Digite o dossiê…"></textarea>
+                  </div>
+                  <div class="actions-row mt-2">
+                    <button class="btn btn-primary btn-small" type="button" data-action="auditor-report-save" data-type="dossie">Salvar rascunho</button>
+                    <button class="btn btn-secondary btn-small" type="button" data-action="auditor-report-ai" data-type="dossie">Gerar rascunho (IA)</button>
+                    <button class="btn btn-secondary btn-small" type="button" data-action="auditor-report-preview" data-type="dossie">Atualizar preview</button>
+                  </div>
+                  <div id="auditor-report-preview-dossie" class="report-preview mt-2"></div>
+                </div>
+              </div>
+
+              <div id="auditor-reports-history" class="reports-history mt-3" data-empty="reports" hidden></div>
+              <div id="auditor-deliverables-preview" class="mt-3" aria-live="polite" hidden></div>
+
+              <button
+                class="btn btn-secondary btn-small mt-2"
+                type="button"
+                data-action="auditor-approve-latest"
+                disabled
+                aria-disabled="true"
+                hidden
+                title="Funcionalidade em desenvolvimento"
+              >
+                Aprovar última versão
+              </button>
+            </section>
+
+            <!-- STATUS (agora: recomendação) -->
+            <section
+              id="auditor-panel-status"
+              class="dash-card inner auditor-panel"
+              role="tabpanel"
+              tabindex="0"
+              aria-labelledby="auditor-tab-status"
+              aria-label="Status do ciclo"
+              data-panel="status"
+              hidden
+            >
+              <h3 class="h3-tight">Recomendação de status</h3>
+
+              <div class="form-group">
+                <label for="auditor-status-select">Recomendar status</label>
+                <select id="auditor-status-select" name="status_select">
+                  <option value="Em análise">Em análise</option>
+                  <option value="Devolvido p/ ajustes">Pendente de complemento</option>
+                  <option value="Em validação">Em validação</option>
+                  <option value="Validado">Validado</option>
+                  <option value="Encerrado">Encerrado</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="auditor-status-reason">Motivo técnico (obrigatório)</label>
+                <textarea
+                  id="auditor-status-reason"
+                  name="status_reason"
+                  rows="3"
+                  placeholder="Fundamente a recomendação (evidência, indicador, achado e risco)…"
+                ></textarea>
+              </div>
+
+              <label class="checkbox-line">
+                <input id="auditor-independent-verified" name="independent_verified" type="checkbox" />
+                Verificação independente conferida (requisito para recomendar <span class="text-strong">Validado</span>).
+              </label>
+
+              <div class="actions-row">
+                <button class="btn btn-primary btn-small" type="button" data-action="auditor-change-status">
+                  Salvar recomendação
+                </button>
+              </div>
+            </section>
+
+            <!-- PUBLICAÇÃO (DEPRECADO) — mantido hidden para não quebrar JS legado -->
+            <section
+              id="auditor-panel-publish"
+              class="dash-card inner auditor-panel span-all"
+              role="tabpanel"
+              tabindex="0"
+              aria-labelledby="auditor-tab-publish"
+              aria-label="Publicação no diretório"
+              data-panel="publish"
+              hidden
+              data-deprecated="1"
+              aria-hidden="true"
+            >
+              <h3 class="h3-tight">Publicação no diretório</h3>
+
+              <div class="publish-actions">
+                <button
+                  class="btn btn-secondary btn-small"
+                  type="button"
+                  data-action="auditor-preview-public"
+                  disabled
+                  aria-disabled="true"
+                  title="Disponível no piloto"
+                >
+                  Ver prévia
+                </button>
+
+                <button
+                  class="btn btn-primary btn-small"
+                  type="button"
+                  data-action="auditor-publish"
+                  disabled
+                  aria-disabled="true"
+                  title="Disponível no piloto"
+                >
+                  Publicar/atualizar
+                </button>
+              </div>
+
+              <div id="auditor-public-preview" class="public-preview mt-3" data-empty="public-preview"></div>
+            </section>
+
+            <!-- RECURSOS -->
+            <section
+              id="auditor-panel-appeals"
+              class="dash-card inner auditor-panel span-all"
+              role="tabpanel"
+              tabindex="0"
+              aria-labelledby="auditor-tab-appeals"
+              aria-label="Recursos administrativos"
+              data-panel="appeals"
+              hidden
+            >
+              <h3 class="h3-tight">Recursos administrativos</h3>
+              <div id="auditor-appeals-list" class="appeals-list" data-empty="appeals"></div>
+              <div id="auditor-appeal-detail" class="appeal-detail mt-3" hidden></div>
+            </section>
+
+            <!-- TRILHA -->
+            <section
+              id="auditor-panel-audit"
+              class="dash-card inner auditor-panel span-all"
+              role="tabpanel"
+              tabindex="0"
+              aria-labelledby="auditor-tab-audit"
+              aria-label="Trilha de auditoria"
+              data-panel="audit"
+              hidden
+            >
+              <h3 class="h3-tight">Trilha de auditoria</h3>
+
+              <div class="actions-row">
+                <button class="btn btn-secondary btn-small" type="button" data-action="auditor-refresh-audit">
+                  Atualizar
+                </button>
+                <button class="btn btn-secondary btn-small" type="button" data-action="auditor-export-audit">
+                  Exportar log
+                </button>
+              </div>
+
+              <div id="auditor-audit-timeline" class="audit-timeline mt-3" data-empty="audit"></div>
+            </section>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

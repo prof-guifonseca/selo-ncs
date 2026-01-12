@@ -1,0 +1,459 @@
+<!-- =====================================================================
+  admin-dashboard.html — Painel do Gestor (parcial para include)
+
+  Objetivo: triagem formal, organização do fluxo e designação de avaliadores.
+  Não decide mérito técnico. Decisão final é da NCS.
+
+  Notas:
+  - Não alterar IDs ou data-action (capturados pelo actions.js).
+======================================================================= -->
+
+<div id="admin-dashboard-view" class="view" data-view="admin-dashboard">
+  <div class="admin-dashboard-shell" data-shell="admin">
+    <div id="admin-dashboard-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Cabeçalho -->
+    <header class="dash-header" aria-label="Cabeçalho do gestor">
+      <div class="dash-header-left">
+        <h1 class="dash-title">Painel do gestor</h1>
+        <p class="muted">
+          Triagem formal: completude e higiene de dados. A Operação organiza o fluxo e designa avaliadores. Decisão final: NCS.
+        </p>
+      </div>
+
+      <div class="dash-header-right" aria-label="Indicadores e ações rápidas">
+        <div class="dash-meta muted">
+          <span class="meta-chip">Total: <span id="admin-meta-total" aria-live="polite">—</span></span>
+          <span class="meta-chip">Triagem: <span id="admin-meta-triagem" aria-live="polite">—</span></span>
+          <span class="meta-chip">Em análise: <span id="admin-meta-analise" aria-live="polite">—</span></span>
+        </div>
+
+        <div class="btn-cluster">
+          <button class="btn btn-secondary btn-small" type="button" data-action="admin-refresh-dashboard">Atualizar</button>
+          <a class="btn btn-secondary btn-small" href="/dashboard/admin?anchor=configuracoes" aria-label="Ir para administração">
+            Administração
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Avisos operacionais (injetados pelo JS) -->
+    <div id="admin-notice" class="dash-card admin-notice" role="status" aria-live="polite" hidden></div>
+
+    <!-- Navegação de modos -->
+    <nav class="admin-mode-nav auditor-subnav" aria-label="Modos do painel" role="tablist">
+      <button
+        class="subnav-btn active"
+        type="button"
+        id="admin-mode-operacao"
+        role="tab"
+        aria-selected="true"
+        aria-controls="admin-panel-operacao"
+        tabindex="0"
+        data-action="admin-switch-tab"
+        data-target="operacao"
+      >
+        Operação
+      </button>
+
+      <button
+        class="subnav-btn"
+        type="button"
+        id="admin-mode-ncs"
+        role="tab"
+        aria-selected="false"
+        aria-controls="admin-panel-ncs"
+        tabindex="-1"
+        data-action="admin-switch-tab"
+        data-target="ncs"
+      >
+        Decisão NCS
+      </button>
+    </nav>
+
+    <!-- Administração -->
+    <section id="configuracoes" class="dash-card admin-config-card" aria-label="Administração">
+      <header class="card-head">
+        <h2 class="h2-tight">Administração</h2>
+        <p class="muted">Cadastros mínimos: empresa, vínculos e designação de avaliadores.</p>
+      </header>
+
+      <div class="admin-config-grid" aria-label="Ações administrativas">
+        <section class="dash-card" aria-label="Criar empresa">
+          <header class="card-head">
+            <h3 class="h2-tight">Criar empresa</h3>
+          </header>
+
+          <form id="admin-create-company-form" class="form" autocomplete="off">
+            <div class="form-row">
+              <label for="admin-company-name">Nome</label>
+              <input id="admin-company-name" name="name" type="text" required placeholder="Ex.: Padaria São José" />
+            </div>
+
+            <div class="form-row">
+              <label for="admin-company-slug">Identificador curto</label>
+              <input id="admin-company-slug" name="slug" type="text" placeholder="ex.: padaria-sao-jose" />
+              <div class="hint">Se vazio, será gerado a partir do nome.</div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn" data-action="admin-create-company">Criar</button>
+            </div>
+
+            <div id="admin-company-create-result" class="result" role="status" aria-live="polite"></div>
+          </form>
+        </section>
+
+        <section class="dash-card" aria-label="Criar vínculo">
+          <header class="card-head">
+            <h3 class="h2-tight">Criar vínculo</h3>
+          </header>
+
+          <form id="admin-create-membership-form" class="form" autocomplete="off">
+            <div class="form-row">
+              <label for="admin-membership-company">Empresa</label>
+              <select id="admin-membership-company" name="company_id">
+                <option value="">Sem empresa — acesso administrativo</option>
+              </select>
+            </div>
+
+            <!-- Novo campo para buscar usuário por email.  Ao clicar no botão
+                 “Buscar ID”, o campo ID será preenchido automaticamente. -->
+            <div class="form-row">
+              <label for="admin-membership-email">Email do usuário</label>
+              <input
+                id="admin-membership-email"
+                name="email"
+                type="email"
+                placeholder="Email do usuário"
+              />
+              <button
+                type="button"
+                class="btn btn-secondary btn-small"
+                data-action="admin-resolve-user"
+              >
+                Buscar ID
+              </button>
+            </div>
+
+            <div class="form-row">
+              <label for="admin-membership-user">ID do usuário</label>
+              <input
+                id="admin-membership-user"
+                name="user_id"
+                type="text"
+                required
+                placeholder="ID do usuário — auth.users.id"
+              />
+              <div class="hint">Dica: consulte em <code>/api/session</code>.</div>
+            </div>
+
+            <div class="form-row">
+              <label for="admin-membership-role">Perfil</label>
+              <select id="admin-membership-role" name="role" required>
+                <option value="client">Participante</option>
+                <option value="auditor">Avaliador</option>
+                <option value="admin">Administrador</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <label><input id="admin-membership-active" name="is_active" type="checkbox" checked /> Ativo</label>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn" data-action="admin-create-membership">Salvar</button>
+              <button type="button" class="btn btn-secondary" data-action="admin-memberships-refresh">Recarregar</button>
+            </div>
+
+            <div id="admin-membership-create-result" class="result" role="status" aria-live="polite"></div>
+          </form>
+        </section>
+
+        <section class="dash-card" aria-label="Designar avaliadores">
+          <header class="card-head">
+            <h3 class="h2-tight">Designar avaliadores</h3>
+          </header>
+
+          <form id="admin-assign-auditors-form" class="form" autocomplete="off">
+            <div class="form-row">
+              <label for="admin-assign-process">ID do processo</label>
+              <input id="admin-assign-process" name="process_id" type="text" required placeholder="ID do processo" />
+            </div>
+
+            <div class="form-row">
+              <label for="admin-assign-principal">Responsável</label>
+              <input id="admin-assign-principal" name="principal_id" type="text" required placeholder="ID do avaliador" />
+            </div>
+
+            <div class="form-row">
+              <label for="admin-assign-reviewer">Revisor</label>
+              <input id="admin-assign-reviewer" name="reviewer_id" type="text" required placeholder="ID do avaliador" />
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn" data-action="admin-assign-auditors">Atribuir</button>
+            </div>
+
+            <div id="admin-assign-result" class="result" role="status" aria-live="polite"></div>
+          </form>
+        </section>
+
+        <section class="dash-card" aria-label="Criar processo">
+          <header class="card-head">
+            <h3 class="h2-tight">Criar processo</h3>
+          </header>
+
+          <form id="admin-create-process-form" class="form" autocomplete="off">
+            <div class="form-row">
+              <label for="admin-process-company">Empresa</label>
+              <input id="admin-process-company" name="company" type="text" required placeholder="Ex.: Padaria São José" />
+            </div>
+
+            <div class="form-row">
+              <label for="admin-process-owner">Responsável pelo processo</label>
+              <input id="admin-process-owner" name="owner_id" type="text" placeholder="ID do participante" />
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn" data-action="admin-create-process">Criar</button>
+            </div>
+
+            <div id="admin-process-create-result" class="result" role="status" aria-live="polite"></div>
+          </form>
+
+          <p class="hint">Depois, use o ID do processo para designar avaliadores.</p>
+        </section>
+
+        <section class="dash-card" aria-label="Listas administrativas">
+          <header class="card-head">
+            <h3 class="h2-tight">Listas</h3>
+            <p class="muted">Empresas e vínculos cadastrados.</p>
+          </header>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" data-action="admin-memberships-refresh">Recarregar listas</button>
+          </div>
+
+          <div class="admin-config-lists">
+            <div>
+              <h4 class="h2-tight">Empresas</h4>
+              <pre id="admin-companies-list" class="code" aria-label="Lista de empresas"></pre>
+            </div>
+            <div>
+              <h4 class="h2-tight">Vínculos</h4>
+              <pre id="admin-memberships-list" class="code" aria-label="Lista de vínculos"></pre>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- Painel de Operação -->
+    <div id="admin-panel-operacao" role="tabpanel" aria-labelledby="admin-mode-operacao">
+      <!-- KPIs -->
+      <section class="dash-card kpi-section" aria-label="Indicadores">
+        <header class="card-head">
+          <h2 class="h2-tight">Indicadores</h2>
+        </header>
+        <div id="admin-kpi-grid" class="kpi-grid" aria-live="polite"></div>
+      </section>
+
+      <!-- Limite -->
+      <div id="admin-limit-callout" class="callout callout-info mt-4" hidden>
+        <p class="callout-title">Exibindo até <span id="admin-limit-count">—</span> processos.</p>
+        <div class="form-actions">
+          <button class="btn btn-secondary btn-small" type="button" data-action="admin-load-more">Carregar mais</button>
+        </div>
+      </div>
+
+      <!-- Permissão -->
+      <div id="admin-permission-callout" class="callout callout-warning mt-4" hidden>
+        <p class="callout-title">Sem processos visíveis</p>
+        <p class="callout-body">
+          Verifique <code>/api/session</code>: role <strong>admin</strong>. Se necessário, ajuste em
+          <a href="/dashboard/admin?anchor=configuracoes">Administração</a> e atualize.
+        </p>
+      </div>
+
+      <!-- Grid principal -->
+      <div class="admin-dashboard-layout">
+        <!-- Fila de processos -->
+        <section class="dash-card queue-section" aria-label="Fila de processos">
+          <header class="card-head">
+            <h2 class="h2-tight">Fila de processos</h2>
+          </header>
+
+          <div class="queue-filters" aria-label="Filtros">
+            <div class="form-group">
+              <label for="admin-filter-stage">Etapa</label>
+              <select id="admin-filter-stage" data-action="admin-filter">
+                <option value="">Todas</option>
+                <option value="Triagem">Triagem</option>
+                <option value="Aguardando designação">Aguardando designação</option>
+                <option value="Em análise">Em análise</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="admin-filter-search">Buscar</label>
+              <input
+                type="text"
+                id="admin-filter-search"
+                placeholder="Empresa, município ou setor"
+                autocomplete="off"
+                data-action="admin-filter"
+              />
+            </div>
+
+            <div class="form-actions align-end">
+              <button class="btn btn-secondary btn-small" type="button" data-action="admin-clear-filters">Limpar</button>
+            </div>
+          </div>
+
+          <div id="admin-process-list" class="process-list" role="list"></div>
+        </section>
+
+        <!-- Detalhe (Operação) -->
+        <section
+          id="admin-process-detail-section"
+          class="dash-card detail-section dash-process-detail"
+          aria-label="Detalhes do processo"
+          hidden
+        >
+          <div id="admin-process-detail" class="detail-card"></div>
+
+          <!-- Formulários de Triagem e Decisão (Operação)
+               Estas seções ficam ocultas por padrão e são preenchidas via JS quando um processo é aberto.
+               IDs exclusivos com sufixo -op são usados para evitar colisões com a versão NCS. -->
+          <section id="admin-triage-form-op" class="dash-card" hidden aria-label="Editar triagem">
+            <h3 class="h2-tight">Triagem</h3>
+            <div class="form-row">
+              <label for="admin-triage-status-op">Status</label>
+              <select id="admin-triage-status-op" name="status">
+                <option value="">Selecionar</option>
+                <option value="apto">Apto</option>
+                <option value="pendente_complemento">Pendente de complemento</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="admin-triage-flags-op">Flags</label>
+              <input id="admin-triage-flags-op" name="flags" type="text" placeholder="Ex.: falta documento" />
+            </div>
+            <div class="form-row">
+              <label for="admin-triage-notes-op">Notas</label>
+              <textarea id="admin-triage-notes-op" name="notes" rows="3"></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-primary btn-small" data-action="admin-update-triage">Salvar triagem</button>
+            </div>
+            <div id="admin-triage-result-op" class="result" role="status" aria-live="polite"></div>
+          </section>
+
+          <section id="admin-decision-form-op" class="dash-card" hidden aria-label="Registrar decisão final">
+            <h3 class="h2-tight">Decisão final</h3>
+            <div class="form-row">
+              <label for="admin-decision-status-op">Status</label>
+              <select id="admin-decision-status-op" name="status">
+                <option value="">Selecionar</option>
+                <option value="validado">Validado</option>
+                <option value="validado_condicionado">Validado condicionado</option>
+                <option value="reprovado">Reprovado</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="admin-decision-reason-op">Motivo</label>
+              <textarea id="admin-decision-reason-op" name="reason" rows="3"></textarea>
+            </div>
+            <div class="form-row">
+              <label for="admin-decision-score-op">Pontuação</label>
+              <input id="admin-decision-score-op" name="score" type="number" min="0" max="100" step="1" />
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-primary btn-small" data-action="admin-ncs-decide">Registrar decisão</button>
+              <button type="button" class="btn btn-secondary btn-small" data-action="admin-ncs-align">Sinalizar alinhamento</button>
+              <button type="button" class="btn btn-secondary btn-small" data-action="admin-ncs-return">Devolver à Operação</button>
+            </div>
+            <div id="admin-decision-result-op" class="result" role="status" aria-live="polite"></div>
+          </section>
+        </section>
+      </div>
+    </div>
+
+    <!-- Painel NCS -->
+    <div id="admin-panel-ncs" role="tabpanel" aria-labelledby="admin-mode-ncs" hidden>
+      <div class="admin-dashboard-layout">
+        <section class="dash-card queue-section" aria-label="Processos em decisão NCS">
+          <header class="card-head">
+            <h2 class="h2-tight">Em decisão NCS</h2>
+          </header>
+
+          <div id="admin-ncs-process-list" class="process-list" role="list"></div>
+          <p id="admin-ncs-empty" class="empty-state" hidden>Sem casos aguardando decisão.</p>
+        </section>
+
+        <section
+          id="admin-ncs-process-detail-section"
+          class="dash-card detail-section dash-process-detail"
+          aria-label="Detalhes do processo"
+          hidden
+        >
+          <div id="admin-ncs-process-detail" class="detail-card"></div>
+
+          <!-- Formulários de Triagem e Decisão (NCS)
+               Versão para o painel NCS. IDs com sufixo -ncs são usados para diferenciar dos formulários da aba Operação. -->
+          <section id="admin-triage-form-ncs" class="dash-card" hidden aria-label="Editar triagem (NCS)">
+            <h3 class="h2-tight">Triagem</h3>
+            <div class="form-row">
+              <label for="admin-triage-status-ncs">Status</label>
+              <select id="admin-triage-status-ncs" name="status">
+                <option value="">Selecionar</option>
+                <option value="apto">Apto</option>
+                <option value="pendente_complemento">Pendente de complemento</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="admin-triage-flags-ncs">Flags</label>
+              <input id="admin-triage-flags-ncs" name="flags" type="text" placeholder="Ex.: falta documento" />
+            </div>
+            <div class="form-row">
+              <label for="admin-triage-notes-ncs">Notas</label>
+              <textarea id="admin-triage-notes-ncs" name="notes" rows="3"></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-primary btn-small" data-action="admin-update-triage">Salvar triagem</button>
+            </div>
+            <div id="admin-triage-result-ncs" class="result" role="status" aria-live="polite"></div>
+          </section>
+
+          <section id="admin-decision-form-ncs" class="dash-card" hidden aria-label="Registrar decisão final (NCS)">
+            <h3 class="h2-tight">Decisão final</h3>
+            <div class="form-row">
+              <label for="admin-decision-status-ncs">Status</label>
+              <select id="admin-decision-status-ncs" name="status">
+                <option value="">Selecionar</option>
+                <option value="validado">Validado</option>
+                <option value="validado_condicionado">Validado condicionado</option>
+                <option value="reprovado">Reprovado</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="admin-decision-reason-ncs">Motivo</label>
+              <textarea id="admin-decision-reason-ncs" name="reason" rows="3"></textarea>
+            </div>
+            <div class="form-row">
+              <label for="admin-decision-score-ncs">Pontuação</label>
+              <input id="admin-decision-score-ncs" name="score" type="number" min="0" max="100" step="1" />
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-primary btn-small" data-action="admin-ncs-decide">Registrar decisão</button>
+              <button type="button" class="btn btn-secondary btn-small" data-action="admin-ncs-align">Sinalizar alinhamento</button>
+              <button type="button" class="btn btn-secondary btn-small" data-action="admin-ncs-return">Devolver à Operação</button>
+            </div>
+            <div id="admin-decision-result-ncs" class="result" role="status" aria-live="polite"></div>
+          </section>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

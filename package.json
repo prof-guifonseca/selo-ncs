@@ -1,0 +1,27 @@
+{
+  "name": "ncs-selo",
+  "version": "1.2.0",
+  "private": true,
+  "license": "SEE LICENSE IN LICENSE",
+  "scripts": {
+    "build": "node build.js",
+    "smoke": "node scripts/smoke.mjs",
+    "smoke:backend": "node scripts/smoke_backend.mjs",
+    "serve": "node scripts/serve.mjs",
+    "contract": "node scripts/contract_backend.mjs",
+    "contract:front": "node scripts/contract_front.mjs",
+    "contract:brand": "node scripts/contract_brand.mjs",
+    "check:docs": "node scripts/no-missing-docs.mjs",
+    "typecheck:front": "tsc -p tsconfig.front.json",
+    "typecheck:node": "tsc -p tsconfig.node.json",
+    "typecheck": "npm run typecheck:front && npm run typecheck:node",
+    "ci": "npm run check:docs && npm run build && npm run typecheck && npm run smoke && npm run contract:front && npm run contract:brand && npm run smoke:backend && npm run contract",
+    "e2e": "playwright test",
+    "e2e:install": "playwright install --with-deps chromium"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "5.2.2",
+    "@playwright/test": "^1.39.0"
+  }
+}

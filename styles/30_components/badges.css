@@ -1,0 +1,94 @@
+/* ==========================================================================
+   NCS — Components — badges.css
+   Fonte: split de styles/components.css (v5.0.1)
+   ========================================================================== */
+
+@layer components {
+/* --------------------------------------------------------------------------
+   8) Badges, chips, tags (ÚNICO COMPONENTE)
+   -------------------------------------------------------------------------- */
+
+.badge,
+.meta-chip,
+.scope-tag,
+.status-tag,
+.pillar-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: var(--r-pill);
+  font-size: var(--fs-00);
+  line-height: 1.1;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.meta-chip {
+  background: rgba(11, 106, 166, 0.08);
+  border-color: rgba(11, 106, 166, 0.18);
+  color: var(--color-text);
+}
+
+/* Pillars */
+.badge-planeta {
+  background: rgba(44, 122, 87, 0.1);
+  border-color: rgba(44, 122, 87, 0.22);
+}
+.badge-pessoas {
+  background: rgba(11, 106, 166, 0.1);
+  border-color: rgba(11, 106, 166, 0.22);
+}
+.badge-governanca {
+  background: rgba(29, 49, 83, 0.1);
+  border-color: rgba(29, 49, 83, 0.22);
+}
+.badge-prosperidade {
+  background: rgba(240, 162, 2, 0.14);
+  border-color: rgba(240, 162, 2, 0.3);
+}
+
+/* Status tags */
+.status-conforme {
+  background: rgba(44, 122, 87, 0.1);
+  border-color: rgba(44, 122, 87, 0.24);
+}
+.status-analise {
+  background: rgba(11, 106, 166, 0.1);
+  border-color: rgba(11, 106, 166, 0.24);
+}
+.status-na {
+  background: rgba(217, 45, 90, 0.1);
+  border-color: rgba(217, 45, 90, 0.26);
+}
+.status-pendente {
+  background: rgba(240, 162, 2, 0.14);
+  border-color: rgba(240, 162, 2, 0.3);
+}
+
+.dot-sep {
+  margin-inline: var(--s-2);
+  opacity: 0.55;
+}
+
+/* Variações por status (sem redefinir .badge) */
+.badge.submitted {
+  background: rgba(11, 106, 166, 0.12);
+  border-color: rgba(11, 106, 166, 0.22);
+}
+.badge.in_review {
+  background: rgba(240, 162, 2, 0.14);
+  border-color: rgba(240, 162, 2, 0.3);
+}
+.badge.returned {
+  background: rgba(217, 45, 90, 0.1);
+  border-color: rgba(217, 45, 90, 0.26);
+}
+.badge.approved {
+  background: rgba(44, 122, 87, 0.1);
+  border-color: rgba(44, 122, 87, 0.24);
+}
+
+}

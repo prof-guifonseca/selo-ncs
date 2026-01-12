@@ -1,0 +1,22 @@
+/* ==========================================================================
+   NCS — Components — landing-indicators.css
+   Fonte: split de styles/components.css (v5.0.1)
+   ========================================================================== */
+
+@layer components {
+/* --------------------------------------------------------------------------
+   21) Landing: "O que é avaliado" (indicators)
+   - sem sobrescrever bullet-list: só grid e espaçamentos
+   -------------------------------------------------------------------------- */
+
+.indicators .indicators-lead {
+  max-width: 78ch;
+}
+
+.indicators .indicator-simple-grid {
+  display: grid;
+  gap: var(--s-4);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+}

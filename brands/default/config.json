@@ -1,0 +1,40 @@
+{
+  "program_name_full": "NCS: Governança & Impacto",
+  "program_name_short": "NCS",
+  "seal_name": "Selo NCS",
+  "support_email": "coordenacao@comunidade-ncs.org",
+  "support_whatsapp": "",
+  "legal_base_url": "/docs",
+  "logo_primary": "/images/ncs-logo.png",
+  "logo_partner": "/images/logo-intuel.png",
+  "location_label": "Londrina, PR • NCS (INTUEL/UEL)",
+  "footer_copyright": "© 2026 NCS — Governança & Impacto.",
+
+  
+  "program": {
+    "name_full": "NCS: Governança & Impacto",
+    "name_short": "NCS",
+    "seal_name": "Selo NCS"
+  },
+  "operator": {
+    "name_full": "Operação da Plataforma",
+    "name_short": "Operação"
+  },
+  "support": {
+    "email": "coordenacao@comunidade-ncs.org",
+    "whatsapp": ""
+  },
+  "legal": {
+    "base_url": "/docs"
+  },
+  "logo": {
+    "primary": "/images/ncs-logo.png",
+    "partner": "/images/logo-intuel.png"
+  },
+  "location": {
+    "label": "Londrina, PR • NCS (INTUEL/UEL)"
+  },
+  "footer": {
+    "copyright": "© 2026 NCS — Governança & Impacto."
+  }
+}

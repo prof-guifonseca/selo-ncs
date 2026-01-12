@@ -1,0 +1,7 @@
+E2E automated tests have not been executed yet.
+
+This file will be updated automatically by the GitHub Actions workflow
+when the E2E suite runs.  It is intentionally committed here so that the
+directory structure exists.  The CI job pipes the output of the
+`npm run e2e` command into this file to preserve a concise summary of
+the run, including any failures and the overall exit status.

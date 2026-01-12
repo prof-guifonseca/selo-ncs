@@ -1,0 +1,62 @@
+/* ==========================================================================
+   NCS — Components — toast.css
+   Fonte: split de styles/components.css (v5.0.1)
+   ========================================================================== */
+
+@layer components {
+/* --------------------------------------------------------------------------
+   13) Global message / toast
+   - sobe um pouco para não brigar com o chat no canto direito
+   -------------------------------------------------------------------------- */
+
+#global-message {
+  position: fixed;
+  right: var(--s-4);
+  bottom: calc(var(--s-4) + 64px + env(safe-area-inset-bottom, 0px));
+  max-width: min(520px, calc(100vw - 2 * var(--s-4)));
+  z-index: 2000;
+}
+
+.global-message {
+  border-radius: var(--r-2);
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-3);
+  padding: var(--s-4) var(--s-5);
+  color: var(--color-text);
+  font-size: var(--fs-0);
+  animation: ncs-pop var(--dur-3) var(--ease);
+}
+
+.global-message--success {
+  border-color: rgba(44, 122, 87, 0.28);
+  background: rgba(44, 122, 87, 0.1);
+}
+
+.global-message--error,
+.global-message--danger {
+  border-color: rgba(217, 45, 90, 0.3);
+  background: rgba(217, 45, 90, 0.1);
+}
+
+.global-message--warning {
+  border-color: rgba(240, 162, 2, 0.34);
+  background: rgba(240, 162, 2, 0.14);
+}
+
+.global-message--info {
+  border-color: rgba(11, 106, 166, 0.3);
+  background: rgba(11, 106, 166, 0.1);
+}
+
+/* compat (antigas) */
+#global-message.success .global-message {
+  border-color: rgba(44, 122, 87, 0.28);
+  background: rgba(44, 122, 87, 0.1);
+}
+#global-message.error .global-message {
+  border-color: rgba(217, 45, 90, 0.3);
+  background: rgba(217, 45, 90, 0.1);
+}
+
+}

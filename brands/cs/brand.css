@@ -1,0 +1,25 @@
+/*
+ * Marca neutra (cs) para o núcleo do Selo.  Este arquivo define
+ * variáveis CSS que podem ser sobrescritas pelas marcas específicas.
+ * As cores padrão aqui são idênticas ao tema base para manter
+ * consistência visual sem expor nenhuma identidade de marca.
+ */
+
+@layer tokens {
+  :root {
+    /* Tons neutros da marca (idênticos ao design system base) */
+    --brand-0: #2c7a57;
+    --brand-1: #1f5d45;
+    --brand-2: #134133;
+
+    /* Tons de destaque neutros */
+    --accent-0: #0b6aa6;
+    --accent-1: #085a8f;
+    --accent-2: #064770;
+
+    /* Ajustes opcionais de logo da navbar.  Mantidos iguais
+       ao tema base; podem ser personalizados por marcas. */
+    --navbar-logo-h-ncs: var(--navbar-logo-h);
+    --navbar-logo-h-intuel: var(--navbar-logo-h);
+  }
+}

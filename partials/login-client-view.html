@@ -1,0 +1,199 @@
+<div id="login-view" class="view" data-view="login">
+        <div class="auth-container">
+          <div class="auth-form">
+            <h2>Autenticação</h2>
+            <p class="auth-intro">Você está entrando na área segura do Programa de Verificação Independente — NCS: Governança &amp; Impacto.</p>
+
+            <div class="auth-tabs" role="tablist" aria-label="Escolha entre login e cadastro">
+              <button
+                id="tab-login"
+                class="tab-btn active"
+                type="button"
+                role="tab"
+                aria-controls="login-form-tab"
+                aria-selected="true"
+                data-action="switch-auth-tab"
+                data-tab="login"
+              >
+                Login
+              </button>
+              <button
+                id="tab-register"
+                class="tab-btn"
+                type="button"
+                role="tab"
+                aria-controls="register-form-tab"
+                aria-selected="false"
+                data-action="switch-auth-tab"
+                data-tab="register"
+              >
+                Cadastro
+              </button>
+            </div>
+
+            <div id="login-form-tab" class="auth-tab-content active" role="tabpanel" aria-labelledby="tab-login">
+              <form id="login-form" novalidate data-api="auth/login" data-role="client" autocomplete="on">
+                <div id="login-error" class="error-message" role="alert" aria-live="assertive"></div>
+
+                <div class="form-group">
+                  <label for="login-email">E-mail da Organização<span class="required" aria-hidden="true">*</span></label>
+                  <input type="email" id="login-email" name="email" autocomplete="email" required />
+                </div>
+
+                <div class="form-group password-group">
+                  <label for="login-password">Senha<span class="required" aria-hidden="true">*</span></label>
+                  <div class="password-wrapper">
+                    <input type="password" id="login-password" name="password" autocomplete="current-password" required />
+                    <button
+                      type="button"
+                      class="password-toggle"
+                      aria-label="Mostrar senha"
+                      data-action="toggle-password"
+                      data-target="login-password"
+                    >
+                      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                        <use href="#icon-eye"></use>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+              </form>
+
+              <!-- Anti-hashchange: href neutro; navegação via JS -->
+              <p class="auth-link">
+                <a href="#" data-action="navigate" data-view="landing" data-scroll-target="inicio">Voltar ao início</a>
+              </p>
+            </div>
+
+            <div id="register-form-tab" class="auth-tab-content" role="tabpanel" aria-labelledby="tab-register">
+              <form id="register-form" novalidate data-api="auth/register" data-role="client" autocomplete="on">
+                <div id="register-error" class="error-message" role="alert" aria-live="assertive"></div>
+
+                <!-- Campos de cadastro -->
+                <div class="form-group">
+                  <label for="register-company">Empresa<span class="required" aria-hidden="true">*</span></label>
+                  <input
+                    type="text"
+                    id="register-company"
+                    name="register-company"
+                    autocomplete="organization"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="register-email">E-mail da Organização<span class="required" aria-hidden="true">*</span></label>
+                  <input
+                    type="email"
+                    id="register-email"
+                    name="register-email"
+                    autocomplete="email"
+                    required
+                  />
+                </div>
+
+                <div class="form-group password-group">
+                  <label for="register-password">Senha<span class="required" aria-hidden="true">*</span></label>
+                  <div class="password-wrapper">
+                    <input
+                      type="password"
+                      id="register-password"
+                      name="register-password"
+                      autocomplete="new-password"
+                      required
+                    />
+                    <button
+                      type="button"
+                      class="password-toggle"
+                      aria-label="Mostrar senha"
+                      data-action="toggle-password"
+                      data-target="register-password"
+                    >
+                      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                        <use href="#icon-eye"></use>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="form-group password-group">
+                  <label for="register-password-confirm">Confirmar senha<span class="required" aria-hidden="true">*</span></label>
+                  <div class="password-wrapper">
+                    <input
+                      type="password"
+                      id="register-password-confirm"
+                      name="register-password-confirm"
+                      autocomplete="new-password"
+                      required
+                    />
+                    <button
+                      type="button"
+                      class="password-toggle"
+                      aria-label="Mostrar senha"
+                      data-action="toggle-password"
+                      data-target="register-password-confirm"
+                    >
+                      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                        <use href="#icon-eye"></use>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="form-group checkbox">
+                  <input type="checkbox" id="terms-platform" name="accept_terms_platform" required />
+                  <label for="terms-platform">
+                    Aceito os
+                    <!-- Anti-:target / anti-hashchange -->
+                    <a
+                      href="#"
+                      role="button"
+                      aria-haspopup="dialog"
+                      aria-controls="info-modal"
+                      data-action="open-modal"
+                      data-modal="terms-platform"
+                      class="text-link"
+                    >
+                      Termos de Uso da Plataforma
+                    </a>
+                  </label>
+                </div>
+
+                <div class="form-group checkbox">
+                  <input type="checkbox" id="terms-process" name="accept_terms_process" required />
+                  <label for="terms-process">
+                    Aceito os
+                    <!-- Anti-:target / anti-hashchange -->
+                    <a
+                      href="#"
+                      role="button"
+                      aria-haspopup="dialog"
+                      aria-controls="info-modal"
+                      data-action="open-modal"
+                      data-modal="terms-process"
+                      class="text-link"
+                    >
+                      Termos do Processo de Verificação
+                    </a>
+                  </label>
+                </div>
+
+                <button
+                  type="submit"
+                  id="register-submit"
+                  class="btn btn-primary btn-block"
+                >
+                  Cadastrar
+                </button>
+              </form>
+
+              <!-- Anti-hashchange -->
+              <p class="auth-link">
+                <a href="#" data-action="navigate" data-view="landing" data-scroll-target="inicio">Voltar ao início</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>

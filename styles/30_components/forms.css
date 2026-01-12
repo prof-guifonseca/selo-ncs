@@ -1,0 +1,115 @@
+/* ==========================================================================
+   NCS — Components — forms.css
+   Fonte: split de styles/components.css (v5.0.1)
+   ========================================================================== */
+
+@layer components {
+/* --------------------------------------------------------------------------
+   9) Forms
+   -------------------------------------------------------------------------- */
+
+.auth-form,
+.form,
+.form-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--r-2);
+  box-shadow: var(--shadow-2);
+}
+
+.form-group {
+  display: grid;
+  gap: var(--s-2);
+  margin-bottom: var(--s-4);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-4);
+}
+
+@media (max-width: 720px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+label {
+  font-weight: var(--fw-medium);
+  color: var(--color-text);
+}
+
+.required {
+  color: var(--color-danger);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+input[type="url"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.68rem 0.75rem;
+  border-radius: var(--r-1);
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  color: var(--color-text);
+  transition:
+    box-shadow var(--dur-2) var(--ease),
+    border-color var(--dur-2) var(--ease),
+    background var(--dur-2) var(--ease);
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: rgba(11, 106, 166, 0.42);
+  box-shadow: 0 0 0 4px var(--focus);
+}
+
+.input-help {
+  margin: 0;
+  font-size: var(--fs-0);
+  color: var(--color-muted);
+}
+
+.password-wrapper {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--s-2);
+  align-items: center;
+}
+
+.password-toggle {
+  border-radius: var(--r-1);
+  border: 1px solid var(--color-line);
+  background: var(--color-surface-2);
+  padding: 0.68rem 0.75rem;
+}
+
+.checkbox-line {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--fs-0);
+  color: var(--color-text-2);
+}
+
+.error-message {
+  color: var(--color-danger);
+  font-size: var(--fs-0);
+  margin: var(--s-1) 0 0;
+}
+
+}

@@ -1,0 +1,25 @@
+/*
+ * Marca NCS (ncs).  Esta folha de estilos replica a configuração
+ * padrão utilizada anteriormente.  Ela define as variáveis de cor
+ * utilizadas pelo design system para o Selo NCS.
+ */
+
+@layer tokens {
+  :root {
+    /* Tons de marca */
+    --brand-0: #2c7a57;
+    --brand-1: #1f5d45;
+    --brand-2: #134133;
+
+    /* Tons de destaque */
+    --accent-0: #0b6aa6;
+    --accent-1: #085a8f;
+    --accent-2: #064770;
+
+    /* Ajustes opcionais de logo da navbar.
+     * Para a marca NCS estes valores seguem iguais aos tokens originais,
+     * mas são declarados aqui como exemplo de customização futura. */
+    --navbar-logo-h-ncs: var(--navbar-logo-h);
+    --navbar-logo-h-intuel: var(--navbar-logo-h);
+  }
+}

@@ -1,0 +1,249 @@
+/* ==========================================================================
+   NCS — Components — dashboards.css
+   Fonte: split de styles/components.css (v5.0.1)
+   ========================================================================== */
+
+@layer components {
+/* --------------------------------------------------------------------------
+   17) Dashboards: queue + detail layout (v4.0) — BODY SCROLL
+   -------------------------------------------------------------------------- */
+
+.auditor-dashboard-grid,
+.client-dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-6);
+  align-items: start;
+}
+
+/* Mobile: permanece 1 coluna (explícito) */
+@media (max-width: 900px) {
+  .auditor-dashboard-grid,
+  .client-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* BODY SCROLL: sem overflow interno nas colunas */
+.queue-section,
+.detail-section {
+  overflow: visible;
+  max-height: none;
+}
+
+/* Padding consistente para filhos diretos (sem exigir wrappers) */
+.queue-section > .queue-filters,
+.queue-section > .process-list {
+  padding: var(--s-5);
+}
+
+.queue-section > .queue-filters {
+  padding-bottom: var(--s-3);
+}
+
+.detail-section > .auditor-subnav,
+.detail-section > .detail-grid {
+  padding: var(--s-5);
+}
+
+.detail-section > .auditor-subnav {
+  padding-bottom: var(--s-3);
+}
+
+/* --------------------------------------------------------------------------
+   18) Process list & items
+   -------------------------------------------------------------------------- */
+
+.process-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.process-item {
+  border: 1px solid var(--color-line);
+  border-radius: var(--r-2);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-1);
+
+  padding: var(--s-4);
+  margin-top: var(--s-3);
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+
+  transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
+}
+
+.process-list > .process-item:first-child {
+  margin-top: 0;
+}
+
+.process-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-2);
+}
+
+.process-item .process-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-2);
+}
+
+.process-item .process-name {
+  font-size: var(--fs-1);
+  font-weight: var(--fw-semibold);
+  margin: 0;
+  color: var(--color-text);
+}
+
+.process-item .meta-chip,
+.process-item .badge {
+  font-size: var(--fs-00);
+  line-height: 1.6;
+  padding: 0 var(--s-2);
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+}
+
+.process-item .process-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+  color: var(--color-muted);
+  font-size: var(--fs-00);
+}
+
+.process-item .process-meta span + span::before {
+  content: "•";
+  margin: 0 var(--s-1);
+  color: var(--color-muted);
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--color-muted);
+  padding: var(--s-6) var(--s-4);
+}
+
+/* Detalhe do processo: cabeçalho e ações (BODY SCROLL => sem sticky) */
+.detail-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+
+  padding-bottom: var(--s-3);
+  border-bottom: 1px solid var(--color-line);
+
+  position: static;
+  background: transparent;
+  z-index: auto;
+}
+
+.detail-title h2 {
+  margin: 0;
+}
+
+.detail-quick-actions {
+  display: flex;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.detail-quick-actions .input-help {
+  font-size: var(--fs-00);
+  color: var(--color-muted);
+}
+
+/* --------------------------------------------------------------------------
+   19) Evidence upload & lists
+   -------------------------------------------------------------------------- */
+
+.file-drop {
+  display: block;
+  width: 100%;
+  border: 2px dashed var(--color-line);
+  border-radius: var(--r-2);
+  background: var(--color-surface-2);
+  color: var(--color-text-2);
+  padding: var(--s-5);
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background var(--dur-2) var(--ease),
+    border-color var(--dur-2) var(--ease);
+}
+
+.file-drop:hover {
+  background: var(--color-surface-3);
+  border-color: var(--color-brand);
+}
+
+.file-drop-title {
+  display: block;
+  font-weight: var(--fw-semibold);
+  color: var(--color-brand);
+  margin-bottom: var(--s-2);
+}
+
+.file-drop-sub {
+  display: block;
+  font-size: var(--fs-00);
+  color: var(--color-muted);
+}
+
+.evidence-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  margin-top: var(--s-3);
+}
+
+.evidence-item {
+  border: 1px solid var(--color-line);
+  border-radius: var(--r-1);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-1);
+
+  padding: var(--s-3) var(--s-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+
+  transition:
+    background var(--dur-2) var(--ease),
+    box-shadow var(--dur-2) var(--ease);
+}
+
+.evidence-item:hover {
+  background: var(--color-surface-2);
+  box-shadow: var(--shadow-2);
+}
+
+.evidence-item > span {
+  flex: 1;
+  margin-right: var(--s-3);
+  overflow-wrap: anywhere;
+}
+
+.evidence-item button {
+  flex-shrink: 0;
+}
+
+/* Actions row: toolbars wrap gracefully */
+.actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  align-items: center;
+}
+
+}

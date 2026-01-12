@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    // Enable type checking for JavaScript files in the front‑end without emitting any compiled output.
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+
+    // Target modern browsers and modules.  These settings match the existing
+    // project defaults (ES2022 modules) so that imported files are resolved
+    // consistently with the rest of the build scripts.
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ES2022",
+
+    // Include DOM libraries for browser APIs as well as DOM iterables (e.g. NodeList).
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+
+    // Preserve common TypeScript compiler flags used in the root tsconfig.  These
+    // aid interop with CommonJS modules and JSON imports while avoiding
+    // unnecessary library checks.
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true
+  },
+  // Scope the front‑end type check to a dedicated entrypoint plus any
+  // ambient type definitions.  Limiting the include set prevents tsc from
+  // traversing the entire codebase at once, which could generate thousands
+  // of errors.  Instead, critical modules are imported in
+  // scripts/typecheck-front-entry.js so that edits to those files break the
+  // build immediately.
+  "include": [
+    "scripts/typecheck-front-entry.js",
+    "src/types/**/*.d.ts"
+  ]
+}

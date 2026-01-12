@@ -1,0 +1,56 @@
+{
+  "program": {
+    "name_full": "Programa Demo: Sustentabilidade e Prova",
+    "name_short": "Demo Program",
+    "seal_name": "Selo Demo"
+  },
+  "operator": {
+    "name_full": "Operadora Demo",
+    "name_short": "Demo"
+  },
+  "support": {
+    "email": "demo@example.com",
+    "whatsapp": ""
+  },
+  "legal": {
+    "base_url": "/docs"
+  },
+  "logo": {
+    "primary": "/images/ncs-logo.png",
+    "partner": "/images/logo-intuel.png"
+  },
+  "location": {
+    "label": "Cidade Demo, Brasil"
+  },
+  "footer": {
+    "copyright": "© 2026 Demo"
+  },
+  "landing": {
+    "hero": {
+      "title": "Programa Demo: Sustentabilidade e Valor",
+      "subtitle": "Use o Demo para organizar evidências ESG, obter um relatório técnico e uma página pública com ID."
+    },
+    "ncs": {
+      "heading": "Demo & ESG",
+      "description": "O <span class=\"text-strong\">Programa Demo</span> auxilia organizações a demonstrar práticas ESG com <span class=\"text-strong\">evidências claras</span> e decisões registradas."
+    },
+    "deliverables": {
+      "heading": "O que você obtém",
+      "card1": {
+        "title": "Relatório Técnico",
+        "subtitle": "Detalhes sobre pontos fortes e oportunidades",
+        "note": "Um documento completo para uso interno ou compartilhamento."
+      },
+      "card2": {
+        "title": "Resumo Executivo",
+        "subtitle": "Uma página para decisões rápidas",
+        "note": "O essencial do ciclo de forma objetiva."
+      },
+      "card3": {
+        "title": "Selo e Página Pública",
+        "subtitle": "Verificação via link e ID",
+        "note": "Forma simples de provar o status."
+      }
+    }
+  }
+}

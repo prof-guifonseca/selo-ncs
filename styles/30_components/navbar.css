@@ -1,0 +1,298 @@
+/* ==========================================================================
+   NCS — Components — navbar.css
+   Fonte: split de styles/components.css (v5.0.1)
+   ========================================================================== */
+
+@layer components {
+/* --------------------------------------------------------------------------
+   2) Navbar (LIGHT ONLY) — íntegra do bloco (consolidado)
+   -------------------------------------------------------------------------- */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-line);
+  box-shadow: 0 10px 30px rgba(10, 24, 40, 0.06);
+}
+
+.navbar-container {
+  width: var(--container-w);
+  margin-inline: auto;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+}
+
+/* Compat: algumas telas usam .navbar-logo, outras .navbar-brand */
+.navbar-logo,
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  text-decoration: none;
+  min-width: 0;
+}
+
+/* Se existir span de texto no brand */
+.navbar-logo span,
+.navbar-brand span {
+  font-weight: var(--fw-semibold);
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+/* Blindagem: navbar nunca deve herdar bullets/padding */
+.navbar ul,
+.navbar ol {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+.navbar li {
+  margin: 0;
+}
+
+/* --- Navbar: controle de logos --- */
+
+.navbar-logos {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+  line-height: 0; /* evita “altura fantasma” por baseline */
+}
+
+/* Controle principal: altura fixa, largura automática */
+.navbar-logos img {
+  height: var(--navbar-logo-h, 28px);
+  width: auto;
+  max-width: var(--navbar-logo-maxw, 120px);
+  object-fit: contain;
+  display: block;
+}
+
+/* Compat: se alguém ainda usa img direto no .navbar-logo */
+.navbar-logo img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Alturas diferentes por logo (opcional) */
+.navbar-logos .ncs-logo {
+  height: var(--navbar-logo-h-ncs, var(--navbar-logo-h, 28px));
+}
+.navbar-logos .intuel-logo {
+  height: var(--navbar-logo-h-intuel, var(--navbar-logo-h, 28px));
+}
+
+/* Texto do brand não pode quebrar a navbar */
+.navbar-brand-text {
+  min-width: 0;
+}
+
+.navbar-brand-text .brand-title {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
+  padding: 0;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(11, 18, 32, 0.12);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow-1);
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform var(--dur-1) var(--ease),
+    box-shadow var(--dur-2) var(--ease),
+    background var(--dur-2) var(--ease),
+    border-color var(--dur-2) var(--ease);
+}
+
+.hamburger:hover {
+  background: var(--color-surface-2);
+  border-color: rgba(11, 18, 32, 0.16);
+  box-shadow: var(--shadow-2);
+  transform: translateY(-1px);
+}
+
+.hamburger:active {
+  transform: translateY(0);
+}
+
+.hamburger:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--focus), var(--shadow-2);
+}
+
+.hamburger span,
+.hamburger::before,
+.hamburger::after {
+  content: "";
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--color-text);
+  border-radius: 2px;
+  transition: transform var(--dur-2) var(--ease), opacity var(--dur-2) var(--ease);
+}
+
+.hamburger span {
+  margin: 4px 0;
+}
+
+.hamburger.is-open span {
+  opacity: 0;
+}
+.hamburger.is-open::before {
+  transform: translateY(6px) rotate(45deg);
+}
+.hamburger.is-open::after {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* Nav menu */
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin-left: auto;
+}
+
+/* Links com “cara de botão” suave */
+.nav-menu a,
+.nav-menu button {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 var(--s-3);
+  border-radius: var(--r-pill);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-text-2);
+  text-decoration: none;
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  transition:
+    transform var(--dur-1) var(--ease),
+    box-shadow var(--dur-2) var(--ease),
+    background var(--dur-2) var(--ease),
+    border-color var(--dur-2) var(--ease),
+    color var(--dur-2) var(--ease);
+}
+
+.nav-menu a:hover,
+.nav-menu button:hover {
+  background: rgba(11, 18, 32, 0.04);
+  border-color: rgba(11, 18, 32, 0.1);
+  color: var(--color-text);
+  box-shadow: 0 10px 24px rgba(10, 24, 40, 0.06);
+  transform: translateY(-1px);
+}
+
+.nav-menu a:active,
+.nav-menu button:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 16px rgba(10, 24, 40, 0.06);
+}
+
+.nav-menu a:focus-visible,
+.nav-menu button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--focus), 0 10px 24px rgba(10, 24, 40, 0.06);
+}
+
+/* Active (view navigation) — sem “hack”; JS decide quem fica active */
+.nav-menu a.active,
+.nav-menu a[aria-current="page"],
+.nav-menu button.active,
+.nav-menu button[aria-current="page"] {
+  background: rgba(11, 18, 32, 0.04);
+  border-color: rgba(11, 18, 32, 0.12);
+  color: var(--color-text);
+  box-shadow: 0 10px 24px rgba(10, 24, 40, 0.06);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+/* “suavidade” extra para botões dentro da navbar */
+.navbar .btn {
+  border-radius: var(--r-pill);
+  min-height: 40px;
+}
+
+/* Mobile nav */
+@media (max-width: 920px) {
+  .hamburger {
+    display: inline-flex;
+  }
+
+  .nav-menu {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    padding: var(--s-4);
+    background: rgba(255, 255, 255, 0.98);
+    border-bottom: 1px solid var(--color-line);
+    box-shadow: var(--shadow-2);
+
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--s-2);
+  }
+
+  .nav-menu.is-open {
+    display: flex;
+  }
+
+  .nav-menu a,
+  .nav-menu button {
+    height: auto;
+    padding: var(--s-3) var(--s-4);
+    border-radius: var(--r-1);
+    text-align: left;
+    justify-content: flex-start;
+  }
+
+  .nav-actions {
+    gap: var(--s-3);
+  }
+}
+
+/* Responsivo: reduz logo no mobile */
+@media (max-width: 720px) {
+  .navbar-logos img {
+    height: var(--navbar-logo-h-mobile, 22px);
+    max-width: var(--navbar-logo-maxw-mobile, 96px);
+  }
+}
+
+}

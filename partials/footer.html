@@ -1,0 +1,128 @@
+<!-- footer.html — compacto (mesmas âncoras/modais, microcopy reduzida) -->
+<footer class="footer" aria-label="Rodapé">
+  <div class="footer-content container">
+    <!-- Coluna 1 — Sobre -->
+    <section class="footer-about" aria-label="Sobre">
+      <!-- Títulos do programa e da operação são preenchidos em tempo de execução pelo runtime de marca. -->
+      <h2 id="footer-program-title" class="footer-title" title=""></h2>
+      <!-- Elemento opcional para o nome completo da operação. Preenchido em runtime se definido. -->
+      <h2 id="footer-operator-title" class="footer-title" title=""></h2>
+
+      <p class="footer-disclaimer">
+        Verificação anual para micro e pequenas empresas: evidências <strong>E / S / G</strong>, dossiê rastreável,
+        dupla avaliação e parecer técnico (por escopo e ciclo).
+        <strong>Não substitui</strong> certificações acreditadas, auditorias regulatórias ou obrigações legais.
+      </p>
+    </section>
+
+    <!-- Coluna 2 — Documentos -->
+    <section class="footer-docs" aria-label="Documentos">
+      <h2 class="footer-subtitle">Documentos</h2>
+
+      <nav class="footer-nav" aria-label="Base normativa e termos">
+        <ul class="footer-list" role="list">
+          <li>
+            <a href="#regulation-program" data-action="open-modal" data-modal="regulation-program"
+               aria-haspopup="dialog" aria-controls="info-modal">
+              Regulamento do Programa
+            </a>
+          </li>
+          <li>
+            <a href="#terms-process" data-action="open-modal" data-modal="terms-process"
+               aria-haspopup="dialog" aria-controls="info-modal">
+              Termos do Processo
+            </a>
+          </li>
+          <li>
+            <a href="#regulation-seal-use" data-action="open-modal" data-modal="regulation-seal-use"
+               aria-haspopup="dialog" aria-controls="info-modal">
+              Uso do Selo
+            </a>
+          </li>
+          <li>
+            <a href="#policy-impartiality-coi" data-action="open-modal" data-modal="policy-impartiality-coi"
+               aria-haspopup="dialog" aria-controls="info-modal">
+              Imparcialidade &amp; COI
+            </a>
+          </li>
+          <li>
+            <a href="#procedure-appeals-complaints-denunciations" data-action="open-modal"
+               data-modal="procedure-appeals-complaints-denunciations"
+               aria-haspopup="dialog" aria-controls="info-modal">
+              Apelações &amp; Denúncias
+            </a>
+          </li>
+          <li>
+            <a href="#code-auditor-conduct" data-action="open-modal" data-modal="code-auditor-conduct"
+               aria-haspopup="dialog" aria-controls="info-modal">
+              Conduta do Avaliador
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </section>
+
+    <!-- Coluna 3 — Plataforma + Contato -->
+    <section class="footer-contact" aria-label="Plataforma, privacidade e contato">
+      <nav class="footer-nav" aria-label="Plataforma e privacidade">
+        <h2 class="footer-subtitle">Plataforma</h2>
+
+        <ul class="footer-list" role="list">
+          <li>
+            <a href="#terms-platform" data-action="open-modal" data-modal="terms-platform"
+               aria-haspopup="dialog" aria-controls="info-modal">
+              Termos da Plataforma
+            </a>
+          </li>
+          <li>
+            <a href="#privacy-platform" data-action="open-modal" data-modal="privacy-platform"
+               aria-haspopup="dialog" aria-controls="info-modal">
+              Privacidade do Portal
+            </a>
+          </li>
+          <li>
+            <a href="#privacy-process" data-action="open-modal" data-modal="privacy-process"
+               aria-haspopup="dialog" aria-controls="info-modal">
+              Privacidade do Processo
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="footer-contact-block" aria-label="Contato">
+        <h2 class="footer-subtitle">Contato</h2>
+
+        <!-- Contato por e‑mail.  O conteúdo e o href serão preenchidos pela marca
+             via data-brand-text/href.  Se não houver valor, este elemento será
+             ocultado pelo runtime. -->
+        <p class="footer-line">
+          <a id="footer-email" data-brand-text="support.email"></a>
+        </p>
+        <!-- Contato por WhatsApp (opcional).  Se definido em config, será
+             exibido; caso contrário, ocultado. -->
+        <p id="footer-whatsapp" class="footer-line" data-brand-text="support.whatsapp"></p>
+        <!-- Localização (opcional).  Exibe o rótulo da localização definido
+             pela marca; oculto quando vazio. -->
+        <p id="footer-location" class="footer-line" data-brand-text="location.label"></p>
+
+        <!-- Logo slot (se existir) permanece no markup, mas não possui
+             conteúdo por padrão. -->
+        <div class="footer-logos" aria-hidden="true"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container">
+      <!-- Copyright: conteúdo fornecido pela marca.  Se vazio, é oculto pelo runtime. -->
+      <p id="footer-copyright" data-brand-text="footer.copyright"></p>
+      <!-- Operadora: exibe a organização responsável pela operação.  A
+           marca pode definir operator.legal_name; caso contrário, este
+           elemento permanece vazio/oculto.  Prefixamos "Operado por"
+           apenas quando houver valor. -->
+      <p id="footer-operator" class="footer-line">
+        Operado por <span data-brand-text="operator.legal_name"></span>
+      </p>
+    </div>
+  </div>
+</footer>

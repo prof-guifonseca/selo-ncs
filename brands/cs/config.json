@@ -1,0 +1,30 @@
+{
+  "program_name_full": "Programa de Verificação Independente",
+  "program_name_short": "Programa",
+  "program": {
+    "name_full": "Programa de Verificação Independente",
+    "name_short": "Programa"
+  },
+  "operator": {
+    "name_full": "CS Hub Tecnologia de Validação LTDA",
+    "name_short": "CS Hub",
+    "legal_name": "CS Hub Tecnologia de Validação LTDA"
+  },
+  "support": {
+    "email": "",
+    "whatsapp": ""
+  },
+  "legal": {
+    "base_url": "/docs"
+  },
+  "logo": {
+    "primary": "",
+    "partner": ""
+  },
+  "location": {
+    "label": ""
+  },
+  "footer": {
+    "copyright": ""
+  }
+}

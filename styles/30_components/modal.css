@@ -1,0 +1,77 @@
+/* ==========================================================================
+   NCS — Components — modal.css
+   Fonte: split de styles/components.css (v5.0.1)
+   ========================================================================== */
+
+@layer components {
+/* --------------------------------------------------------------------------
+   14) Modal
+   -------------------------------------------------------------------------- */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 18, 32, 0.55);
+  display: none;
+  place-items: center;
+  padding: var(--s-6);
+  z-index: 1500;
+}
+.modal.open {
+  display: grid;
+}
+
+.modal-content {
+  width: min(760px, 100%);
+  background: var(--color-surface);
+  border-radius: var(--r-3);
+  border: 1px solid var(--color-line);
+  box-shadow: var(--shadow-3);
+  padding: var(--s-6);
+  position: relative;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--s-2);
+  margin-top: var(--s-5);
+}
+
+.modal-close {
+  position: absolute;
+  top: var(--s-4);
+  right: var(--s-4);
+  width: 40px;
+  height: 40px;
+
+  border-radius: var(--r-pill);
+  border: 1px solid var(--color-line);
+  background: var(--color-surface-2);
+
+  transition:
+    transform var(--dur-1) var(--ease),
+    box-shadow var(--dur-2) var(--ease),
+    background var(--dur-2) var(--ease);
+}
+
+.modal-close:hover {
+  background: rgba(11, 18, 32, 0.04);
+  box-shadow: var(--shadow-2);
+  transform: translateY(-1px);
+}
+
+.modal-close:active {
+  transform: translateY(0);
+}
+
+.modal-close:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--focus), var(--shadow-2);
+}
+
+}

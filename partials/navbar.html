@@ -1,0 +1,118 @@
+<!-- partials/navbar.html -->
+<nav class="navbar" aria-label="Navegação principal">
+  <div class="navbar-container container">
+    <a class="navbar-brand" href="/?section=inicio" aria-label="Ir para o início">
+          <!-- Placeholder para o nome curto do programa.  Este span será
+           preenchido pelo loader de marca em tempo de execução e permite
+           customizar a marca sem alterar o HTML. -->
+      <span id="navbar-program-name" class="navbar-program-name"></span>
+      <!-- Nome curto da operação (se definido pela marca).  Preenchido em runtime. -->
+      <span id="navbar-operator-name" class="navbar-operator-name"></span>
+      <span class="sr-only">Ir para o início</span>
+    </a>
+
+    <button
+      id="hamburger-menu"
+      class="hamburger"
+      type="button"
+      aria-label="Abrir menu"
+      aria-controls="nav-menu"
+      aria-expanded="false"
+      data-action="toggle-mobile-menu"
+    >
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+
+    <ul id="nav-menu" class="nav-menu" role="list" aria-hidden="true">
+      <li>
+        <a href="/?section=inicio">Início</a>
+      </li>
+
+      <li>
+        <a href="/?section=ncs">NCS</a>
+      </li>
+
+      <li>
+        <a href="/?section=how-it-works">Etapas</a>
+      </li>
+
+      <li>
+        <a href="/?section=deliverables">Entregas</a>
+      </li>
+
+      <li>
+        <a href="/?section=value-proposition">Aplicações</a>
+      </li>
+
+      <li>
+        <a href="/?section=indicators">Avaliação</a>
+      </li>
+
+      <li>
+        <a href="/?section=levels">Resultado</a>
+      </li>
+
+      <li>
+        <a href="/?section=pricing">Investimento</a>
+      </li>
+
+      <li>
+        <a href="/?section=impartiality">Credibilidade</a>
+      </li>
+
+      <li id="nav-dashboard-link" class="nav-cta" hidden aria-hidden="true">
+        <a
+          class="btn-login"
+          href="/dashboard/client"
+          data-action="navigate-view"
+          data-view="client-dashboard"
+          aria-label="Abrir Portal do Participante"
+        >
+          Painel
+        </a>
+      </li>
+
+      <li id="nav-dashboard-auditor-link" class="nav-cta" hidden aria-hidden="true">
+        <a
+          class="btn-login"
+          href="/dashboard/auditor"
+          data-action="navigate-view"
+          data-view="auditor-dashboard"
+          aria-label="Abrir Portal do Avaliador"
+        >
+          Painel
+        </a>
+      </li>
+
+      <li id="nav-dashboard-admin-link" class="nav-cta" hidden aria-hidden="true">
+        <a
+          class="btn-login"
+          href="/dashboard/admin"
+          data-action="navigate-view"
+          data-view="admin-dashboard"
+          aria-label="Abrir Portal do Gestor"
+        >
+          Painel
+        </a>
+      </li>
+
+      <li id="nav-logout-link" class="nav-cta" hidden aria-hidden="true">
+        <button class="btn-login" type="button" data-action="logout">Sair</button>
+      </li>
+
+      <li id="nav-auth-link" class="nav-cta" aria-hidden="false">
+        <a
+          class="btn-login"
+          href="/login"
+          data-action="navigate-view"
+          data-view="login"
+          aria-label="Entrar no Painel"
+        >
+          Painel
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="ncs-api-base" content="/api" />
+    <title>Verificação pública — Selo NCS</title>
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="/public" />
+    <link rel="stylesheet" href="/styles/main.css" />
+  </head>
+
+  <body class="page-public" data-api-base="/api">
+    <main class="public-main">
+      <section class="public-wrap">
+        <header class="public-head">
+          <h1 class="public-title">Verificação pública</h1>
+          <p class="public-subtitle">
+            Consulte empresas que possuem página pública publicada no Selo NCS (nome + nível).
+          </p>
+        </header>
+
+        <div id="public-search" class="public-card">
+          <form id="public-search-form" class="public-form">
+            <label class="public-form__label" for="public-q">Nome da empresa</label>
+            <div class="public-form__row">
+              <input id="public-q" class="input" type="text" placeholder="Ex.: Cooperativa X" />
+              <button class="btn btn-primary" type="submit">Buscar</button>
+            </div>
+          </form>
+
+          <div class="public-results">
+            <div id="public-results-meta" class="public-results__meta"></div>
+            <div id="public-results" class="public-results__list"></div>
+          </div>
+        </div>
+
+        <div id="public-detail" class="public-card" hidden>
+          <div class="public-detail">
+            <h2 id="public-company-name" class="public-company">—</h2>
+            <div class="public-level">
+              <span class="public-level__label">Nível</span>
+              <span id="public-company-level" class="public-level__value">—</span>
+            </div>
+
+            <div class="public-actions">
+              <a class="btn btn-secondary" href="/public">Nova verificação</a>
+            </div>
+          </div>
+        </div>
+
+        <div id="public-error" class="public-card" hidden>
+          <div class="public-error">
+            <h2 class="public-error__title">Não encontrado</h2>
+            <p id="public-error-text" class="public-error__text">
+              Não foi possível localizar essa página pública.
+            </p>
+            <div class="public-actions">
+              <a class="btn btn-primary" href="/public">Tentar novamente</a>
+              <a class="btn btn-secondary" href="/">Ir para o site</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="public-footer">
+      <div class="public-footer__inner">
+        <span>© NCS — Selo Governança & Impacto</span>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        try {
+          var meta = document.querySelector('meta[name="ncs-api-base"]');
+          var metaBase = meta ? meta.getAttribute('content') : '';
+          var bodyBase = (document.body && document.body.dataset && document.body.dataset.apiBase) || '';
+          var raw = String(metaBase || bodyBase || '/api').trim();
+          if (!raw) return;
+          var base = raw.replace(/\/+$/, '');
+          window.NCS_API_BASE = base;
+        } catch (e) {}
+      })();
+    </script>
+
+    <script type="module" src="/src/publicPage.js"></script>
+  </body>
+</html>

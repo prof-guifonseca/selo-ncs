@@ -1,0 +1,47 @@
+/* ==========================================================================
+   NCS — Components — cookie-banner.css
+   Fonte: split de styles/components.css (v5.0.1)
+   ========================================================================== */
+
+@layer components {
+/* --------------------------------------------------------------------------
+   20) Cookie banner
+   -------------------------------------------------------------------------- */
+
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+
+  background: var(--color-surface-2);
+  border-top: 1px solid var(--color-line);
+
+  padding: var(--s-3) var(--s-4);
+  display: none;
+
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-3);
+
+  z-index: 2000;
+  box-shadow: var(--shadow-1);
+}
+
+.cookie-banner.show {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cookie-banner p {
+  margin: 0;
+  flex: 1;
+}
+
+.cookie-banner .banner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+}

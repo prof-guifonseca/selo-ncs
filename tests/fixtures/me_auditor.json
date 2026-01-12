@@ -1,0 +1,9 @@
+{
+  "ok": true,
+  "user": {
+    "id": "auditor-1",
+    "email": "auditor@example.com"
+  },
+  "role": "auditor",
+  "roles": ["auditor"]
+}

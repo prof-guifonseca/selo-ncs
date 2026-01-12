@@ -1,0 +1,56 @@
+/* ==========================================================================
+   NCS — Overrides (última camada)
+   - Ajustes visuais incrementais (Aurora Cívica)
+   - Sem mexer em IDs/data-actions; evita regressões
+   ========================================================================== */
+
+@layer overrides {
+
+/* Fundo: reforça a sensação premium sem quebrar superfícies */
+body {
+  background: var(--app-bg, var(--color-bg));
+}
+
+/* Navbar: acabamento mais premium (glass leve) */
+.navbar {
+  background: var(--surface-glass, var(--color-surface));
+  border-bottom: 1px solid var(--surface-glass-border, var(--color-line));
+}
+
+@supports ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
+  .navbar {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+}
+
+/* Cards: borda mais consistente + lift suave */
+.dash-card,
+.pricing-card,
+.card {
+  border-color: var(--color-line);
+}
+
+.dash-card:hover,
+.pricing-card:hover,
+.card:hover {
+  box-shadow: var(--shadow-3);
+}
+
+/* Badges: tints alinhados (se o legado tiver rgba solto) */
+.badge.badge-success { background: var(--color-success-soft); border-color: var(--color-success-soft-border); }
+.badge.badge-warning { background: var(--color-warning-soft); border-color: var(--color-warning-soft-border); }
+.badge.badge-danger  { background: var(--color-danger-soft);  border-color: var(--color-danger-soft-border); }
+.badge.badge-info    { background: var(--color-info-soft);    border-color: var(--color-info-soft-border); }
+
+/* Botões: reforço de foco (sem mudar layout) */
+.btn:focus-visible,
+.nav-menu a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--focus-strong);
+  outline-offset: 2px;
+}
+
+}

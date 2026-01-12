@@ -1,0 +1,122 @@
+/* ==========================================================================
+   NCS — Components — lists.css
+   Fonte: split de styles/components.css (v5.0.1)
+   ========================================================================== */
+
+@layer components {
+/* --------------------------------------------------------------------------
+   6) Lists — Bullet list (robusta) + Stepper
+   -------------------------------------------------------------------------- */
+
+/* Bullet list — FIX: sem grid no LI (evita quebra letra-por-letra) */
+.bullet-list {
+  list-style: none;
+  padding: 0;
+  margin: var(--s-4) 0 0;
+  display: grid;
+  gap: var(--s-3);
+}
+
+.bullet-list li {
+  position: relative;
+
+  /* espaço à esquerda para o dot + gap */
+  padding: var(--s-3) var(--s-3) var(--s-3) calc(var(--s-3) + 18px + var(--s-3));
+
+  border-radius: var(--r-2);
+  border: 1px solid rgba(11, 18, 32, 0.08);
+  background: var(--color-surface);
+  color: var(--color-text-2);
+}
+
+.bullet-list li .text-strong,
+.bullet-list li strong {
+  color: var(--color-text);
+  font-weight: var(--fw-semibold);
+}
+
+.bullet-list li::before {
+  content: "";
+  position: absolute;
+  left: var(--s-3);
+  top: calc(var(--s-3) + 0.42rem);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(44, 122, 87, 0.92);
+  box-shadow: 0 0 0 4px rgba(44, 122, 87, 0.14);
+}
+
+/* Variante compacta (para cards: sem “caixa” por item) */
+.bullet-list--compact {
+  gap: var(--s-2);
+  margin-top: var(--s-3);
+}
+
+.bullet-list--compact li {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+
+  /* espaço pro dot (senão ele “come” o texto) */
+  padding: 0.35rem 0 0.35rem calc(18px + var(--s-3));
+}
+
+.bullet-list--compact li::before {
+  left: 0;
+  top: 0.62rem;
+}
+
+/* Stepper (home) */
+.stepper {
+  list-style: none;
+  padding: 0;
+  margin: var(--s-4) 0 0;
+  display: grid;
+  gap: var(--s-2);
+}
+
+.stepper .step {
+  position: relative;
+  padding: 0.6rem 0.75rem 0.6rem 2.1rem;
+  border-radius: var(--r-1);
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  color: var(--color-text-2);
+  font-size: var(--fs-0);
+}
+
+.stepper .step::before {
+  content: "";
+  position: absolute;
+  left: 0.75rem;
+  top: 0.9rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid rgba(11, 18, 32, 0.28);
+  background: transparent;
+}
+
+.stepper .step.done {
+  background: rgba(44, 122, 87, 0.08);
+  border-color: rgba(44, 122, 87, 0.2);
+}
+
+.stepper .step.done::before {
+  border-color: rgba(44, 122, 87, 0.55);
+  background: rgba(44, 122, 87, 0.55);
+}
+
+.stepper .step.current {
+  background: rgba(11, 106, 166, 0.09);
+  border-color: rgba(11, 106, 166, 0.22);
+  color: var(--color-text);
+}
+
+.stepper .step.current::before {
+  border-color: rgba(11, 106, 166, 0.55);
+  background: rgba(11, 106, 166, 0.55);
+}
+
+}

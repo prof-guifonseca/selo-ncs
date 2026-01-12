@@ -1,0 +1,112 @@
+/* ==========================================================================
+   NCS — Components — footer.css
+   Fonte: split de styles/components.css (v5.0.1)
+   ========================================================================== */
+
+@layer components {
+/* --------------------------------------------------------------------------
+   16) Footer
+   -------------------------------------------------------------------------- */
+
+/* Ajustes de espaçamento e tipografia: o rodapé ocupava área desproporcional
+   em relação às outras seções da landing. Reduzimos o padding vertical e
+   aplicamos tipografias menores conforme as boas práticas de design de footers,
+   que sugerem usar espaço em branco de forma eficiente e evitar excesso de
+   vazio【730817727460644†L276-L299】. */
+.footer {
+  background: var(--color-bg);
+  padding: var(--s-6) 0 var(--s-4);
+  border-top: 1px solid var(--color-line);
+  font-size: var(--fs-1);
+  color: var(--color-text-2);
+}
+
+/* Redução do espaçamento entre colunas para evitar excesso de white space */
+.footer-content {
+  width: var(--container-w);
+  margin-inline: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--s-6);
+}
+
+/* Ajuste de largura mínima para melhorar a distribuição e evitar colunas muito
+   largas em telas grandes, contribuindo para um rodapé mais compacto. */
+.footer-about,
+.footer-contact,
+.footer-content nav {
+  flex: 1 1 220px;
+  min-width: 220px;
+}
+
+.footer h4,
+.footer h5 {
+  margin: 0 0 var(--s-3);
+  font-size: var(--fs-1);
+  color: var(--color-text);
+}
+
+.footer-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--s-2);
+}
+
+.footer-list a {
+  color: var(--color-text-2);
+  text-decoration: none;
+  transition: color var(--dur-2) var(--ease);
+}
+
+.footer-list a:hover {
+  color: var(--color-text);
+}
+
+.footer-contact p {
+  margin: 0 0 var(--s-2);
+}
+
+.footer-bottom {
+  text-align: center;
+  padding: var(--s-3) 0;
+  border-top: 1px solid var(--color-line);
+  color: var(--color-muted);
+  font-size: var(--fs-0);
+}
+
+  /*
+   * Ajustes tipográficos dos elementos do rodapé. Por padrão, h2 em outras
+   * seções são grandes, o que tornava o rodapé desproporcional. Aqui
+   * definimos tamanhos de fonte menores e margens apropriadas para
+   * `.footer-title`, `.footer-subtitle` e `.footer-disclaimer`. Também
+   * reduzimos a tipografia das linhas de contato.
+   */
+  .footer-title {
+    font-size: var(--fs-2);
+    font-weight: var(--fw-semibold);
+    margin: 0 0 var(--s-3);
+    color: var(--color-text);
+  }
+
+  .footer-subtitle {
+    font-size: var(--fs-1);
+    font-weight: var(--fw-semibold);
+    margin: 0 0 var(--s-2);
+    color: var(--color-text);
+  }
+
+  .footer-disclaimer {
+    font-size: var(--fs-0);
+    color: var(--color-text-2);
+    line-height: var(--lh-snug);
+    max-width: 75ch;
+  }
+
+  .footer-line {
+    font-size: var(--fs-0);
+  }
+
+}

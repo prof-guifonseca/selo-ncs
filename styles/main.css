@@ -1,0 +1,51 @@
+/* ==========================================================================
+   NCS — CSS Entry (Design System v1)
+   - Ordem e camadas explícitas (Cascade Layers)
+   - Mantém compatibilidade com HTML/JS existente
+   ========================================================================== */
+
+@layer tokens, base, utilities, components, pages, overrides;
+
+/* Tokens */
+@import "./00_tokens/primitives.css";
+@import "./00_tokens/semantic.css";
+@import "./00_tokens/themes.css";
+
+/* Base */
+@import "./10_base/reset.css";
+@import "./10_base/typography.css";
+@import "./10_base/layout.css";
+@import "./10_base/a11y.css";
+
+/* Utilities */
+@import "./20_utilities/utilities.css";
+
+/* Components */
+@import "./30_components/headings.css";
+@import "./30_components/navbar.css";
+@import "./30_components/button.css";
+@import "./30_components/card.css";
+@import "./30_components/callout.css";
+@import "./30_components/lists.css";
+@import "./30_components/misc.css";
+@import "./30_components/badges.css";
+@import "./30_components/forms.css";
+@import "./30_components/table.css";
+@import "./30_components/tabs.css";
+@import "./30_components/kpi.css";
+@import "./30_components/toast.css";
+@import "./30_components/modal.css";
+@import "./30_components/chat.css";
+@import "./30_components/footer.css";
+@import "./30_components/dashboards.css";
+@import "./30_components/cookie-banner.css";
+@import "./30_components/landing-indicators.css";
+@import "./30_components/polish.css";
+
+/* Pages */
+@import "./40_pages/landing.css";
+@import "./40_pages/auth.css";
+@import "./40_pages/dashboards.css";
+
+/* Overrides (última camada) */
+@import "./99_overrides/overrides.css";

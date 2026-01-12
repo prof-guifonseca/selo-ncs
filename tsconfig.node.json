@@ -1,0 +1,49 @@
+{
+  "compilerOptions": {
+    // Enable type checking for JavaScript files used in the Netlify functions
+    // (backend) without emitting compiled output.
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+
+    // Use modern ECMAScript targets and module syntax to match the project's
+    // build configuration.  Although Netlify functions run in a Node
+    // environment, many modules are authored as ES modules and imported via
+    // bundler resolution.
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ES2022",
+
+    // Include DOM typings as some helpers (e.g. fetch and URL) rely on
+    // browser APIs even in the server context.  ES2022 provides the
+    // baseline JavaScript library definitions.
+    "lib": ["ES2022", "DOM"],
+
+    // Do not explicitly reference @types/node here; instead a minimal set of
+    // Node module shims is provided under src/types/node-shims.d.ts.  Should
+    // a full installation of @types/node become available in CI, it can be
+    // added to the types array without disrupting existing behaviour.
+    "types": [],
+
+    // Preserve interop flags consistent with the root configuration.
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true
+  },
+  // Scope the backend type check to a dedicated entrypoint, the Netlify
+  // functions source tree and ambient type definitions.  When adding more
+  // routes or modules, import them in scripts/typecheck-node-entry.js rather
+  // than broadening this include list.  Including the functions directory
+  // directly allows TypeScript to follow relative requires within the API.
+  "include": [
+    // Entry point for backend type checking.  Only modules imported from
+    // scripts/typecheck-node-entry.js will be analysed.  Avoid using
+    // recursive wildcards here as they can overwhelm the compiler and
+    // surface errors in files outside the intended scope.
+    "scripts/typecheck-node-entry.js",
+    // Ambient type definitions and shims.  These files provide the
+    // necessary declarations for Node built‑ins and custom types.
+    "src/types/**/*.d.ts",
+    "src/types/node-shims.d.ts"
+  ]
+}

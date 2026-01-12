@@ -1,0 +1,26 @@
+/* ==========================================================================
+   NCS — Utilities
+   - Pequenos utilitários de layout (legado preservado)
+   ========================================================================== */
+
+@layer utilities {
+
+.mt-1 { margin-top: var(--s-1) !important; }
+.mt-2 { margin-top: var(--s-2) !important; }
+.mt-3 { margin-top: var(--s-3) !important; }
+.mt-4 { margin-top: var(--s-4) !important; }
+
+.mb-0 { margin-bottom: 0 !important; }
+.mb-1 { margin-bottom: var(--s-1) !important; }
+.mb-2 { margin-bottom: var(--s-2) !important; }
+.mb-3 { margin-bottom: var(--s-3) !important; }
+.mb-4 { margin-bottom: var(--s-4) !important; }
+
+.align-end { align-self: end !important; }
+.d-block { display: block !important; }
+.span-all { grid-column: 1 / -1 !important; }
+
+/* Stack automático */
+.flow > * + * { margin-top: var(--flow-space, var(--s-4)); }
+
+}
